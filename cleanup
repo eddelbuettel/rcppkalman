@@ -1,0 +1,8 @@
+#!/bin/bash
+
+rm -rvf	src/*.o src/*.so src/symbols.rds \
+    	vignettes/auto/ \
+	vignettes/*.aux vignettes/*.log vignettes/.out \
+        vignettes/*.bbl vignettes/*.blg vignettes/*.pdf \
+        vignettes/*.tex vignettes/*.tpt \
+        *~ */*~

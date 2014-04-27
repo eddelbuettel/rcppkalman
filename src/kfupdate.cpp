@@ -1,0 +1,164 @@
+// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+
+// kfupdate.cpp -- based on kf_update.m
+
+// %KF_UPDATE  Kalman Filter update step
+// %
+// % Syntax:
+// %   [X,P,K,IM,IS,LH] = KF_UPDATE(X,P,Y,H,R)
+// %
+// % In:
+// %   X - Nx1 mean state estimate after prediction step
+// %   P - NxN state covariance after prediction step
+// %   Y - Dx1 measurement vector.
+// %   H - Measurement matrix.
+// %   R - Measurement noise covariance.
+// %
+// % Out:
+// %   X  - Updated state mean
+// %   P  - Updated state covariance
+// %   K  - Computed Kalman gain
+// %   IM - Mean of predictive distribution of Y
+// %   IS - Covariance or predictive mean of Y
+// %   LH - Predictive probability (likelihood) of measurement.
+// %   
+// % Description:
+// %   Kalman filter measurement update step. Kalman Filter
+// %   model is
+// %
+// %     x[k] = A*x[k-1] + B*u[k-1] + q,  q ~ N(0,Q)
+// %     y[k] = H*x[k]   + r,             r ~ N(0,R)
+// %
+// %   Prediction step of Kalman filter computes predicted
+// %   mean m-[k] and covariance P-[k] of state:
+// %
+// %     p(x[k] | y[1:k-1]) = N(x[k] | m-[k], P-[k])
+// %
+// %   See for instance KF_PREDICT how m-[k] and P-[k] are
+// %   calculated. 
+// %
+// %   Update step computes the posterior mean m[k] and
+// %   covariance P[k]  of state given new measurement:
+// %
+// %     p(x[k] | y[1:k]) = N(x[k] | m[k], P[k])
+// %
+// %   Innovation distribution is defined as
+// %
+// %     p(y[k] | y[1:k-1]) = N(y[k] | IM[k], IS[k])
+// %   
+// %   Updated mean x[k] and covarience P[k] are given by
+// %   the following equations (not the only possible ones):
+// %
+// %     v[k] = y[k] - H[k]*m-[k]
+// %     S[k] = H[k]*P-[k]*H[k]' + R[k]
+// %     K[k] = P-[k]*H[k]'*[S[k]]^(-1) 
+// %     m[k] = m-[k] + K[k]*v[k]
+// %     P[k] = P-[k] - K[k]*S[k]*K[k]'
+// %
+// % Example:
+// %   m = m0;
+// %   P = P0;
+// %   M = m0;
+// %   for i=1:size(Y,2)
+// %     [m,P] = kf_predict(m,P,A,Q);
+// %     [m,P] = kf_update(m,P,Y(:,i),H,R);
+// %     M = [M m];
+// %   end
+// %
+// % See also:
+// %   KF_PREDICT, EKF_UPDATE
+
+// % History:
+// %   26.02.2007 JH Added the equations for calculating the updated
+// %                 means and covariances to the description section.
+// %   12.01.2003 SS Symmetrized covariance update
+// %   20.11.2002 SS The first official version.
+// %
+// % Copyright (C) 2002, 2003 Simo Särkkä
+// % Copyright (C) 2007 Jouni Hartikainen
+// %
+// % $Id: kf_update.m 111 2007-09-04 12:09:23Z ssarkka $
+// %
+// % This software is distributed under the GNU General Public 
+// % Licence (version 2 or later); please refer to the file 
+// % Licence.txt, included with the software, for details.
+
+// function [X,P,K,IM,IS,LH] = kf_update(X,P,y,H,R)
+
+//   %
+//   % Check which arguments are there
+//   %
+//   if nargin < 5
+//     error('Too few arguments');
+//   end
+
+//   %
+//   % update step
+//   %
+//   IM = H*X;
+//   IS = (R + H*P*H');
+//   K = P*H'/IS;
+//   X = X + K * (y-IM);
+//   P = P - K*IS*K';
+//   if nargout > 5
+//     LH = gauss_pdf(y,IM,IS);
+//   end
+
+
+
+#include <RcppArmadillo.h>
+
+// [[Rcpp::export]]
+Rcpp::List kfUpdate(const arma::vec & x,
+                    const arma::mat & P,
+                    const arma::vec & y,
+                    const arma::mat & H,
+                    const arma::mat & R) {
+
+
+    //   IM = H*X;
+    arma::mat IM = H*x;
+
+    //   IS = (R + H*P*H');
+    arma::mat IS = (R + H * P* H.t());
+    //   K = P*H'/IS;
+    arma::mat lhs = P * H.t();
+    arma::mat rhs = IS;
+    arma::mat K = arma::solve(rhs.t(), lhs.t()).t();
+    //   X = X + K * (y-IM);
+    // Here 'y' (a scalar) gets expanded to dim(IM)x1 !!
+    arma::vec yy(IM.n_rows, arma::fill::ones);
+    yy = yy * y(0);
+    arma::vec newx = x + K * (yy-IM);
+
+    //   P = P - K*IS*K';
+    arma::mat newP = P - K * IS * K.t();
+
+    //if nargout > 5
+    //   LH = gauss_pdf(y,IM,IS);
+    //end
+
+#if 0
+    //    if (newx[0] != 0) {
+        x.print("x");
+        P.print("P");
+        y.print("y");
+        H.print("H");
+        R.print("R");
+        IM.print("IM");
+        IS.print("IS");
+        lhs.print("lhs");
+        rhs.print("rhs");
+        K.print("K");
+        newx.print("newx");
+        newP.print("newP");
+        Rcpp::stop("Now");
+        //}
+#endif
+
+    return Rcpp::List::create(Rcpp::Named("x") = newx,
+                              Rcpp::Named("P") = newP,
+                              Rcpp::Named("K") = K,
+                              Rcpp::Named("IS") = IS,
+                              Rcpp::Named("IM") = IM);
+}
