@@ -13,8 +13,8 @@
 #' @title Compute the exponential of a matrix
 #' @param x An numeric matrix
 #' @return A numeric matrix
-#' @seealso The \pkg{expm} package and its documentation.
 #' @author Dirk Eddelbuettel
+#' @seealso The \pkg{expm} package and its documentation.
 #' @examples 
 #' 
 #' ## example is from the vignette in package expm
@@ -42,7 +42,7 @@ ltiDisc <- function(F, L, Q, dt) {
 }
 
 #' The function computes the Rauch-Tung-Striebel smoother.
-#' 
+#'
 #' This function implements the Rauch-Tung-Striebel smoother algorithm which
 #' calculate a "smoothed" sequence from the given Kalman filter output sequence
 #' by conditioning all steps to all measurements.
@@ -51,17 +51,23 @@ ltiDisc <- function(F, L, Q, dt) {
 #' @param M An N x K matrix of K mean estimates from the Kalman Filter
 #' @param Plist A list of length N with N x N matrices of state covariances
 #' from the Kalman Filter
-#' @param A An N x N state transition matrix (or in the more general case a 
+#' @param A An N x N state transition matrix (or in the more general case a
 #' list of K such matrices; not yet implemented)
-#' @param Q An N x N noise covariance matrix  (or in the more general case a 
+#' @param Q An N x N noise covariance matrix  (or in the more general case a
 #' list of K such matrices; not yet implemented)
-#' @return A list with three elements M, P and D which are, respectively, 
-#' the smoothed mean sequence, the smooted state covariance sequence, and 
-#' the smoothed gain sequence. 
-#' @seealso The EKF/UKF toolbox at \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
-#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen, and Arno Solin. 
-#' Dirk Eddelbuettel is writing and maintaing this package by porting it to R and C++.
-rtsSmoother <- function(M, Plist, A, Q) {
-    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', M, Plist, A, Q)
+#' @return A list with three elements
+#' \describe{
+#'   \item{SM}{the smoothed mean sequence,}
+#'   \item{SP}{the smooted state covariance sequence,and }
+#'   \item{D}{the smoothed gain sequence.}
+#' }
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+#' and Arno Solin.
+#'
+#' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
+#' @seealso The documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+rtsSmoother <- function(Min, Pin, A, Q) {
+    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', Min, Pin, A, Q)
 }
 

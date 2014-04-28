@@ -2,7 +2,7 @@
 \alias{rtsSmoother}
 \title{Rauch-Tung-Striebel smoother}
 \usage{
-rtsSmoother(M, Plist, A, Q)
+rtsSmoother(Min, Pin, A, Q)
 }
 \arguments{
   \item{M}{An N x K matrix of K mean estimates from the
@@ -20,9 +20,10 @@ rtsSmoother(M, Plist, A, Q)
   implemented)}
 }
 \value{
-A list with three elements M, P and D which are,
-respectively, the smoothed mean sequence, the smooted state
-covariance sequence, and the smoothed gain sequence.
+A list with three elements \describe{ \item{SM}{the
+smoothed mean sequence,} \item{SP}{the smooted state
+covariance sequence,and } \item{D}{the smoothed gain
+sequence.} }
 }
 \description{
 The function computes the Rauch-Tung-Striebel smoother.
@@ -35,11 +36,13 @@ steps to all measurements.
 }
 \author{
 The EKF/UKF Toolbox was written by Simo Särkkä, Jouni
-Hartikainen, and Arno Solin. Dirk Eddelbuettel is writing
-and maintaing this package by porting it to R and C++.
+Hartikainen, and Arno Solin.
+
+Dirk Eddelbuettel is porting this package to R and C++, and
+maintaing it.
 }
 \seealso{
-The EKF/UKF toolbox at
+The documentation for the EKF/UKF toolbox at
 \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 }
 

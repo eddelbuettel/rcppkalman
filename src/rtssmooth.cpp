@@ -84,7 +84,7 @@
 
 
 //' The function computes the Rauch-Tung-Striebel smoother.
-//' 
+//'
 //' This function implements the Rauch-Tung-Striebel smoother algorithm which
 //' calculate a "smoothed" sequence from the given Kalman filter output sequence
 //' by conditioning all steps to all measurements.
@@ -93,23 +93,29 @@
 //' @param M An N x K matrix of K mean estimates from the Kalman Filter
 //' @param Plist A list of length N with N x N matrices of state covariances
 //' from the Kalman Filter
-//' @param A An N x N state transition matrix (or in the more general case a 
+//' @param A An N x N state transition matrix (or in the more general case a
 //' list of K such matrices; not yet implemented)
-//' @param Q An N x N noise covariance matrix  (or in the more general case a 
+//' @param Q An N x N noise covariance matrix  (or in the more general case a
 //' list of K such matrices; not yet implemented)
-//' @return A list with three elements M, P and D which are, respectively, 
-//' the smoothed mean sequence, the smooted state covariance sequence, and 
-//' the smoothed gain sequence. 
-//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen, and Arno Solin. 
+//' @return A list with three elements
+//' \describe{
+//'   \item{SM}{the smoothed mean sequence,}
+//'   \item{SP}{the smooted state covariance sequence,and }
+//'   \item{D}{the smoothed gain sequence.}
+//' }
+//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+//' and Arno Solin.
 //'
-//' Dirk Eddelbuettel is writing and maintaing this package by porting it to R and C++.
-//' @seealso The EKF/UKF toolbox at \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+//' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
+//' @seealso The documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 // [[Rcpp::export]]
-Rcpp::List rtsSmoother(arma::mat & M,
-                       Rcpp::List & Plist,
+Rcpp::List rtsSmoother(const arma::mat & Min,
+                       const Rcpp::List & Pin,
                        const arma::mat & A,
                        const arma::mat & Q) {
 
+    arma::mat M = Min;
     int n = M.n_rows;
     int k = M.n_cols;
     arma::cube P(n,n,k);
@@ -127,9 +133,9 @@ Rcpp::List rtsSmoother(arma::mat & M,
     for (int i=0; i<k; i++) {
         AA.slice(i) = A;
         QQ.slice(i) = Q;
-        P.slice(i) = Rcpp::as<arma::mat>(Plist[i]);
+        P.slice(i) = Rcpp::as<arma::mat>(Pin[i]);
     }
-    
+
 
     //   %
     //   % Run the smoother
@@ -152,11 +158,12 @@ Rcpp::List rtsSmoother(arma::mat & M,
         P.slice(j) = P.slice(j) + D.slice(j) * (P.slice(j+1) - Ppred) * D.slice(j).t();
     }
 
+    Rcpp::List Pout(k);
     for (int i=0; i<k; i++) {
-        Plist[i] = P.slice(i);
+        Pout[i] = P.slice(i);
     }
     return Rcpp::List::create(Rcpp::Named("SM") = M,
-                              Rcpp::Named("SP") = Plist,
+                              Rcpp::Named("SP") = Pout,
                               Rcpp::Named("D") = D);
 
 }

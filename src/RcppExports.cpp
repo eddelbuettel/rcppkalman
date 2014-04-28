@@ -79,17 +79,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtsSmoother
-Rcpp::List rtsSmoother(arma::mat& M, Rcpp::List& Plist, const arma::mat& A, const arma::mat& Q);
-RcppExport SEXP RcppKalman_rtsSmoother(SEXP MSEXP, SEXP PlistSEXP, SEXP ASEXP, SEXP QSEXP) {
+Rcpp::List rtsSmoother(const arma::mat& Min, const Rcpp::List& Pin, const arma::mat& A, const arma::mat& Q);
+RcppExport SEXP RcppKalman_rtsSmoother(SEXP MinSEXP, SEXP PinSEXP, SEXP ASEXP, SEXP QSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP );
-        Rcpp::traits::input_parameter< Rcpp::List& >::type Plist(PlistSEXP );
+        Rcpp::traits::input_parameter< const arma::mat& >::type Min(MinSEXP );
+        Rcpp::traits::input_parameter< const Rcpp::List& >::type Pin(PinSEXP );
         Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP );
         Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP );
-        Rcpp::List __result = rtsSmoother(M, Plist, A, Q);
+        Rcpp::List __result = rtsSmoother(Min, Pin, A, Q);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

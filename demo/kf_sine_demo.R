@@ -5,8 +5,8 @@
 ## %
 ## % Copyright (C) 2002 Simo S"arkk"a
 ## %
-## % This software is distributed under the GNU General Public 
-## % Licence (version 2 or later); please refer to the file 
+## % This software is distributed under the GNU General Public
+## % Licence (version 2 or later); please refer to the file
 ## % Licence.txt, included with the software, for details.
 
 suppressMessages(library(RcppKalman))
@@ -83,7 +83,7 @@ for (i in 1:p) Plist[[i]] <- matrix(0, n, n)
 
   ## for k=1:size(Y,2)
 for (k in 1:p) {
-    
+
     ## %
     ## % Track with KF
     ## %
@@ -114,7 +114,7 @@ for (k in 1:p) {
     ##   legend('Real signal','Measurements','Latest estimate','Filtered estimate')
     ##   title('Estimating a noisy sine signal with Kalman filter.');
     ##   drawnow;
-      
+
     ##   pause;
     ## end
   ## end
@@ -135,12 +135,12 @@ legend("topright", bty="n", lty=c("dashed", NA, "solid"), pch=c(NA, "+", NA),
   ## disp('The filtering results are now displayed sequantially for 10 time step at a time.');
   ## disp(' ');
   ## disp('<push any key to see the filtered and smoothed results together>')
-  ## pause;  
+  ## pause;
   ## %
   ## % Apply Kalman smoother
   ## %
 
-    
+
   ## SM = rts_smooth(MM,PP,A,Q);
 rl <- rtsSmoother(MM, Plist, A, Q)
 SM <- rl[["SM"]]
@@ -148,13 +148,13 @@ SM <- rl[["SM"]]
   ## plot(T,X,'b--',...
   ##      T,MM(1,:),'k-',...
   ##      T,SM(1,:),'r-');
-  ## legend('Real signal','Filtered estimate','Smoothed estimate') 
+  ## legend('Real signal','Filtered estimate','Smoothed estimate')
   ## title('Filtered and smoothed estimate of the original signal');
 
 plot(Tseq, X, type='l', lty="dashed", col="blue", ylim=range(Y))
 lines(Tseq, MM[1, ], col="black")
 lines(Tseq, SM[1, ], col="red")
-legend("topright", bty="n", lty=c("dashed", "solid", "solid"), 
+legend("topright", bty="n", lty=c("dashed", "solid", "solid"),
        legend=c("Real signal", "Filtered", "Smoothed"),
        col=c("blue", "black", "red"))
 par(op)
