@@ -22,7 +22,7 @@ addpath("../../inst/ekfukf")
   X = sin(w*T);
   Y = X + sd*randn(size(X));
   
-  X(1:10)
+  %X(1:10)
   
   %
   % Initialize KF to values
@@ -40,7 +40,7 @@ addpath("../../inst/ekfukf")
   F = [0 1;
        0 0];
   [A,Q] = lti_disc(F,[],diag([0 q]),dt);
-  Q
+  %Q
   
   %
   % Track and animate

@@ -90,8 +90,6 @@ Rcpp::List rtsSmoother(arma::mat & M,
 
     int n = M.n_rows;
     int k = M.n_cols;
-    arma::mat SM(n,k);
-
     arma::cube P(n,n,k);
 
     //   %
@@ -122,20 +120,20 @@ Rcpp::List rtsSmoother(arma::mat & M,
     //     P(:,:,k) = P(:,:,k) + D(:,:,k) * (P(:,:,k+1) - P_pred) * D(:,:,k)';
     //   end
     arma::cube D = arma::zeros<arma::cube>(n, n, k);
+
     for (unsigned int j=k-1-1; j>0; j--) {
         arma::mat Ppred = AA.slice(j) * P.slice(j) * AA.slice(j).t() + QQ.slice(j);
         arma::mat lhs = (P.slice(j) * AA.slice(j).t());
         arma::mat rhs = Ppred;
         D.slice(j) = arma::solve(rhs.t(), lhs.t()).t();
-        SM.col(j) = M.col(j) + D.slice(j) * (M.col(j+1) - AA.slice(j) * M.col(j));
+        M.col(j) = M.col(j) + D.slice(j) * (M.col(j+1) - AA.slice(j) * M.col(j));
         P.slice(j) = P.slice(j) + D.slice(j) * (P.slice(j+1) - Ppred) * D.slice(j).t();
     }
 
     for (int i=0; i<k; i++) {
         Plist[i] = P.slice(i);
     }
-
-    return Rcpp::List::create(Rcpp::Named("SM") = SM,
+    return Rcpp::List::create(Rcpp::Named("SM") = M,
                               Rcpp::Named("SP") = Plist,
                               Rcpp::Named("D") = D);
 
