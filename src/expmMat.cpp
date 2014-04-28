@@ -26,8 +26,8 @@ extern "C" void R_init_RcppKalman(DllInfo *dll) {
 //' @title Compute the exponential of a matrix
 //' @param x An numeric matrix
 //' @return A numeric matrix
-//' @seealso The \pkg{expm} package and its documentation.
 //' @author Dirk Eddelbuettel
+//' @seealso The \pkg{expm} package and its documentation.
 //' @examples 
 //' 
 //' ## example is from the vignette in package expm

@@ -41,6 +41,26 @@ ltiDisc <- function(F, L, Q, dt) {
     .Call('RcppKalman_ltiDisc', PACKAGE = 'RcppKalman', F, L, Q, dt)
 }
 
+#' The function computes the Rauch-Tung-Striebel smoother.
+#' 
+#' This function implements the Rauch-Tung-Striebel smoother algorithm which
+#' calculate a "smoothed" sequence from the given Kalman filter output sequence
+#' by conditioning all steps to all measurements.
+#'
+#' @title Rauch-Tung-Striebel smoother
+#' @param M An N x K matrix of K mean estimates from the Kalman Filter
+#' @param Plist A list of length N with N x N matrices of state covariances
+#' from the Kalman Filter
+#' @param A An N x N state transition matrix (or in the more general case a 
+#' list of K such matrices; not yet implemented)
+#' @param Q An N x N noise covariance matrix  (or in the more general case a 
+#' list of K such matrices; not yet implemented)
+#' @return A list with three elements M, P and D which are, respectively, 
+#' the smoothed mean sequence, the smooted state covariance sequence, and 
+#' the smoothed gain sequence. 
+#' @seealso The EKF/UKF toolbox at \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen, and Arno Solin. 
+#' Dirk Eddelbuettel is writing and maintaing this package by porting it to R and C++.
 rtsSmoother <- function(M, Plist, A, Q) {
     .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', M, Plist, A, Q)
 }
