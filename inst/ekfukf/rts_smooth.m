@@ -47,12 +47,8 @@
 
 function [M,P,D] = rts_smooth(M,P,A,Q)
 
-    % for k=1:3
-    %     k
-    %     P(:,:,k)
-    % end
   %
-  % Check which aruments are there
+  % Check which arguments are there
   %
   if nargin < 4
     error('Too few arguments');
@@ -68,51 +64,14 @@ function [M,P,D] = rts_smooth(M,P,A,Q)
     Q = repmat(Q,[1 1 size(M,2)]);
   end
 
-  #A(:,:,1)
-  #Q(:,:,1)
-  #P(:,:,1)
-  #exit
-
-  #P(:,:,1)
-  #P(:,:,2)
-  #P(:,:,1835)
-
   %
   % Run the smoother
   %
   D = zeros(size(M,1),size(M,1),size(M,2));
-  # size(M,1)  ## 6
-  # size(M,2)  ## 1836 aka 'n'
-  # size(M,2)-1
   for k=(size(M,2)-1):-1:1
-      Pin = P(:,:,k);
-      P_pred   = A(:,:,k) * P(:,:,k) * A(:,:,k)' + Q(:,:,k);
-      lhs = P(:,:,k) * A(:,:,k)';
-      rhs = P_pred;
-      D(:,:,k) = P(:,:,k) * A(:,:,k)' / P_pred;
-      M(:,k)   = M(:,k) + D(:,:,k) * (M(:,k+1) - A(:,:,k) * M(:,k));
-      P(:,:,k) = P(:,:,k) + D(:,:,k) * (P(:,:,k+1) - P_pred) * D(:,:,k)';
-      #P(:,:,k);
-      #A(:,:,k);
-      #P_pred;
-      #if (k == 1835 || k <= 2)
-          #disp "k==" 
-          #k
-          #Pin
-          #P_pred
-          #lhs
-          #rhs
-          #lhs_rhs_solve = lhs / rhs
-          #M(:,k)
-          #P(:,:,k)
-      #end
-    #D(:,:,k);
-    #M(:,k);
-    #P(:,:,k);
-    #exit 
+    P_pred   = A(:,:,k) * P(:,:,k) * A(:,:,k)' + Q(:,:,k);
+    D(:,:,k) = P(:,:,k) * A(:,:,k)' / P_pred;
+    M(:,k)   = M(:,k) + D(:,:,k) * (M(:,k+1) - A(:,:,k) * M(:,k));
+    P(:,:,k) = P(:,:,k) + D(:,:,k) * (P(:,:,k+1) - P_pred) * D(:,:,k)';
   end
-  
-  #k = size(M,2);
-  #M(:, (k-4):k)
-  
 
