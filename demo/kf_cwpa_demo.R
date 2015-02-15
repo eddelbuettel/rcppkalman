@@ -10,6 +10,8 @@ suppressMessages(library(RcppKalman))
 
 kf_cwpa_demo <- function() {
 
+    set.seed(42)
+    
     ## % Transition matrix for the continous-time system.
     ## F = [0 0 1 0 0 0;
     ##      0 0 0 1 0 0;
@@ -38,7 +40,7 @@ kf_cwpa_demo <- function() {
     ## q = 0.2;
     ## Qc = diag([q q]);
     q <- 0.2
-    QC <- diag(c(q, q))
+    Qc <- diag(c(q, q))
     
     ## % Discretization of the continous-time system.
     ## [A,Q] = lti_disc(F,L,Qc,dt);
@@ -72,7 +74,7 @@ kf_cwpa_demo <- function() {
     Y <- matrix(0, nrow(H), n)
     Xr <- matrix(0, nrow(F), n)
     for (i in 2:n) {
-        Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorn(1, rep(0, nrow(F)), Q)
+        Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorm(1, rep(0, nrow(F)), Q)
     }
 
     ## % Generate the measurements.
@@ -99,11 +101,20 @@ kf_cwpa_demo <- function() {
     ##
     ## disp(' ');
     ## fprintf('Filtering with KF...');
-
+    cat("This is a demonstration program for the classical Kalman filter.\n\n")
+    cat("KF is used here to estimate the position of a moving object, whose\n") 
+    cat("dynamics follow the CWPA-model described in the documentation\n")
+    cat("provided with the toolbox.\n")
+    
     ## plot(X_r(1,:),X_r(2,:),Y(1,:),Y(2,:),'.',X_r(1,1),...
     ##      X_r(2,1),'ro','MarkerSize',12);
     ## legend('Real trajectory', 'Measurements');
     ## title('Position');
-
+    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="")
+    lines(Y[1,], Y[2,], type='l', col="blue")
+    legend("topleft", c("Real Trajectory", "Measurement"),
+           lty=1, col=c("black", "blue"), bty="n")
     
 }
+
+kf_cwpa_demo()
