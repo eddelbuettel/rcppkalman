@@ -74,6 +74,36 @@ kf_cwpa_demo <- function() {
     for (i in 2:n) {
         Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorn(1, rep(0, nrow(F)), Q)
     }
-    
+
+    ## % Generate the measurements.
+    ## for i = 1:n
+    ##    Y(:,i) = H*X_r(:,i) + gauss_rnd(zeros(size(Y,1),1), R);
+    ## end
+    for (i in 1:n) {
+        Y[,i] <- H %*% Xr[,i] + MASS::mvrnorm(1, rep(0, nrow(Y)), R)
+    }
+
+    ## clf; clc;
+    ## disp('This is a demonstration program for the classical Kalman filter.');
+    ## disp(' ');
+    ## disp(['KF is used here to estimate the position of a moving object, whos ',...
+    ##      'dynamics follow the CWPA-model described in the documentation ',...
+    ##       'provided with the toolbox.']);
+    ## disp(' ');
+    ## disp(['We get noisy measurements from the objects position and velocity ',...
+    ##       'on discrete time steps. The real position of the object and the ',...
+    ##       'measurements made of them are displayed now. The blue line is the ',...
+    ##       'real path of the object and the green dots represents the ',...
+    ##       'measurements. The red circle represents the starting point ',...
+    ##       'of the object.']);
+    ##
+    ## disp(' ');
+    ## fprintf('Filtering with KF...');
+
+    ## plot(X_r(1,:),X_r(2,:),Y(1,:),Y(2,:),'.',X_r(1,1),...
+    ##      X_r(2,1),'ro','MarkerSize',12);
+    ## legend('Real trajectory', 'Measurements');
+    ## title('Position');
+
     
 }
