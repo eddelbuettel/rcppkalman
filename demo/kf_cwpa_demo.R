@@ -110,9 +110,9 @@ kf_cwpa_demo <- function() {
     ##      X_r(2,1),'ro','MarkerSize',12);
     ## legend('Real trajectory', 'Measurements');
     ## title('Position');
-    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="")
-    lines(Y[1,], Y[2,], type='l', col="blue")
-    legend("topleft", c("Real Trajectory", "Measurement"),
+    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue")
+    points(Y[1,], Y[2,], col="green")
+    legend("topleft", c("Real Trajectory", "Measurements"),
            lty=1, col=c("black", "blue"), bty="n")
     
 }
