@@ -8,9 +8,9 @@
 
 suppressMessages(library(RcppKalman))
 
-kf_cwpa_demo <- function() {
+kf_cwpa_demo <- function(seed=42) {
 
-    set.seed(42)
+    set.seed(seed)
     
     ## % Transition matrix for the continous-time system.
     ## F = [0 0 1 0 0 0;
