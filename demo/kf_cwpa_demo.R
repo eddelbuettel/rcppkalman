@@ -115,6 +115,53 @@ kf_cwpa_demo <- function(seed=666) {
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Trajectory", "Measurements"),
            lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
+
+
+    ## % Initial guesses for the state mean and covariance.
+    ## m = [0 0 0 0 0 0]';
+    ## P = diag([0.1 0.1 0.1 0.1 0.5 0.5]);
+    M <- rep(0, 6)
+    P <- diag(c(0.1, 0.1, 0.1, 0.1, 0.5, 0.5))
+    
+    ## %% Space for the estimates.
+    ## MM = zeros(size(m,1), size(Y,2));
+    ## PP = zeros(size(m,1), size(m,1), size(Y,2));
+    n <- length(M)
+    p <- length(Y)
+    MM <- matrix(0, n, p)
+    Plist <- vector(length=p, mode="list")
+    for (i in 1:p) Plist[[i]] <- matrix(0, n, n)
+    
+    ## % Filtering steps.
+    ## for i = 1:size(Y,2)
+    ##    [m,P] = kf_predict(m,P,A,Q);
+    ##    [m,P] = kf_update(m,P,Y(:,i),H,R);
+    ##    MM(:,i) = m;
+    ##    PP(:,:,i) = P;
+    ## end
+    B <- diag(n)
+    u <- matrix(0, n, 1)
+    for (i in 1:p) {
+        rl <- kfPredict(M, P, A, Q, B, u)
+        M <- rl[["x"]]
+        P <- rl[["P"]]
+
+        rl <- kfUpdate(M, P, Y[i], H, R)
+        M <- rl[["x"]]
+        P <- rl[["P"]]
+
+        MM[,i] <- M
+        Plist[[i]] = P
+    }
+
+    ## % Smoothing step.
+    ## [SM,SP] = rts_smooth(MM,PP,A,Q);
+    rl <- rtsSmoother(MM, Plist, A, Q)
+    SM <- rl[["SM"]]
+    #SP <- rl[["SP"]]
+    ## [SM2,SP2] = tf_smooth(MM,PP,Y,A,Q,H,R,1);
+
+
     
 }
 
