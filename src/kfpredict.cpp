@@ -111,18 +111,6 @@ Rcpp::List kfPredict(const arma::vec & x,
 
     arma::mat newP = A * P * A.t() + Q;
 
-#if 0
-    x.print("x");
-    P.print("P");
-    A.print("A");
-    Q.print("Q");
-    B.print("B");
-    u.print("u");
-    newx.print("newx");
-    newP.print("newP");
-    Rcpp::stop("in kfPredict");
-#endif
-
     return Rcpp::List::create(Rcpp::Named("x") = newx,
                               Rcpp::Named("P") = newP);
 }
