@@ -8,7 +8,7 @@
 
 suppressMessages(library(RcppKalman))
 
-kf_cwpa_demo <- function(seed=42) {
+kf_cwpa_demo <- function(seed=666) {
 
     set.seed(seed)
     
@@ -111,9 +111,10 @@ kf_cwpa_demo <- function(seed=42) {
     ## legend('Real trajectory', 'Measurements');
     ## title('Position');
     plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue")
-    points(Y[1,], Y[2,], col="green")
+    points(Y[1,], Y[2,], col="green", pch=18)
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Trajectory", "Measurements"),
-           lty=1, col=c("black", "blue"), bty="n")
+           lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
     
 }
 
