@@ -76,3 +76,21 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// tfSmoother
+Rcpp::List tfSmoother(arma::mat& M, arma::cube& P, const arma::mat& Y, const arma::mat& A, const arma::mat& Q, const arma::mat& H, const arma::mat& R, const bool useinf);
+RcppExport SEXP RcppKalman_tfSmoother(SEXP MSEXP, SEXP PSEXP, SEXP YSEXP, SEXP ASEXP, SEXP QSEXP, SEXP HSEXP, SEXP RSEXP, SEXP useinfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type P(PSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
+    Rcpp::traits::input_parameter< const bool >::type useinf(useinfSEXP);
+    __result = Rcpp::wrap(tfSmoother(M, P, Y, A, Q, H, R, useinf));
+    return __result;
+END_RCPP
+}

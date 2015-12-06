@@ -1,3 +1,7 @@
+2015-12-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/tfsmooth.cpp: First complete version
+
 2015-12-05  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/rtssmooth.cpp: Use automatic as<Cube> converter recently added

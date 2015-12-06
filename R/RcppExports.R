@@ -71,3 +71,7 @@ rtsSmoother <- function(M, P, A, Q) {
     .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', M, P, A, Q)
 }
 
+tfSmoother <- function(M, P, Y, A, Q, H, R, useinf) {
+    .Call('RcppKalman_tfSmoother', PACKAGE = 'RcppKalman', M, P, Y, A, Q, H, R, useinf)
+}
+
