@@ -10,89 +10,69 @@ using namespace Rcpp;
 arma::mat expm(arma::mat x);
 RcppExport SEXP RcppKalman_expm(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP );
-        arma::mat __result = expm(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    __result = Rcpp::wrap(expm(x));
+    return __result;
 END_RCPP
 }
 // kfPredict
 Rcpp::List kfPredict(const arma::vec& x, const arma::mat& P, const arma::mat& A, const arma::mat& Q, const arma::mat& B, const arma::vec& u);
 RcppExport SEXP RcppKalman_kfPredict(SEXP xSEXP, SEXP PSEXP, SEXP ASEXP, SEXP QSEXP, SEXP BSEXP, SEXP uSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type u(uSEXP );
-        Rcpp::List __result = kfPredict(x, P, A, Q, B, u);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type u(uSEXP);
+    __result = Rcpp::wrap(kfPredict(x, P, A, Q, B, u));
+    return __result;
 END_RCPP
 }
 // kfUpdate
 Rcpp::List kfUpdate(const arma::vec& x, const arma::mat& P, const arma::vec& y, const arma::mat& H, const arma::mat& R);
 RcppExport SEXP RcppKalman_kfUpdate(SEXP xSEXP, SEXP PSEXP, SEXP ySEXP, SEXP HSEXP, SEXP RSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP );
-        Rcpp::List __result = kfUpdate(x, P, y, H, R);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
+    __result = Rcpp::wrap(kfUpdate(x, P, y, H, R));
+    return __result;
 END_RCPP
 }
 // ltiDisc
 Rcpp::List ltiDisc(const arma::mat& F, const arma::mat& L, const arma::mat& Q, const double dt);
 RcppExport SEXP RcppKalman_ltiDisc(SEXP FSEXP, SEXP LSEXP, SEXP QSEXP, SEXP dtSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type F(FSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type L(LSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP );
-        Rcpp::traits::input_parameter< const double >::type dt(dtSEXP );
-        Rcpp::List __result = ltiDisc(F, L, Q, dt);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const arma::mat& >::type F(FSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type L(LSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const double >::type dt(dtSEXP);
+    __result = Rcpp::wrap(ltiDisc(F, L, Q, dt));
+    return __result;
 END_RCPP
 }
 // rtsSmoother
-Rcpp::List rtsSmoother(const arma::mat& Min, const Rcpp::List& Pin, const arma::mat& A, const arma::mat& Q);
-RcppExport SEXP RcppKalman_rtsSmoother(SEXP MinSEXP, SEXP PinSEXP, SEXP ASEXP, SEXP QSEXP) {
+Rcpp::List rtsSmoother(arma::mat& M, arma::cube& P, const arma::mat& A, const arma::mat& Q);
+RcppExport SEXP RcppKalman_rtsSmoother(SEXP MSEXP, SEXP PSEXP, SEXP ASEXP, SEXP QSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type Min(MinSEXP );
-        Rcpp::traits::input_parameter< const Rcpp::List& >::type Pin(PinSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP );
-        Rcpp::List __result = rtsSmoother(Min, Pin, A, Q);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type P(PSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    __result = Rcpp::wrap(rtsSmoother(M, P, A, Q));
+    return __result;
 END_RCPP
 }

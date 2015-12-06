@@ -91,7 +91,7 @@
 //'
 //' @title Rauch-Tung-Striebel smoother
 //' @param M An N x K matrix of K mean estimates from the Kalman Filter
-//' @param Plist A list of length N with N x N matrices of state covariances
+//' @param P An N x N x K cube length K with N x N state covariances matrices 
 //' from the Kalman Filter
 //' @param A An N x N state transition matrix (or in the more general case a
 //' list of K such matrices; not yet implemented)
@@ -110,15 +110,13 @@
 //' @seealso The documentation for the EKF/UKF toolbox at
 //' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 // [[Rcpp::export]]
-Rcpp::List rtsSmoother(const arma::mat & Min,
-                       const Rcpp::List & Pin,
+Rcpp::List rtsSmoother(arma::mat & M, 		
+                       arma::cube & P,          
                        const arma::mat & A,
                        const arma::mat & Q) {
-
-    arma::mat M = Min;
+    
     int n = M.n_rows;
     int k = M.n_cols;
-    arma::cube P(n,n,k);
 
     //   %
     //   % Extend A and Q if they are NxN matrices
@@ -133,7 +131,6 @@ Rcpp::List rtsSmoother(const arma::mat & Min,
     for (int i=0; i<k; i++) {
         AA.slice(i) = A;
         QQ.slice(i) = Q;
-        P.slice(i) = Rcpp::as<arma::mat>(Pin[i]);
     }
 
 

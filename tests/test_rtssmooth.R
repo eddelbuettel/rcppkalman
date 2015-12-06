@@ -52,8 +52,7 @@ call_rts_smooth <- function(Y) {
     n <- length(M)
     p <- length(Y)
     MM <- matrix(0, n, p)
-    Plist <- vector(length=p, mode="list")
-    for (i in 1:p) Plist[[i]] <- matrix(0, n, n)
+    PP <- array(0, dim=c(n, n, p))
 
     for (k in 1:p) {
     
@@ -73,9 +72,9 @@ call_rts_smooth <- function(Y) {
         P <- rl[["P"]]
 
         MM[,k] <- M
-        Plist[[k]] = P
+        PP[,,k] <- P
     }
-    rl <- rtsSmoother(MM, Plist, A, Q)
+    rl <- rtsSmoother(MM, PP, A, Q)
     rl
 }
 
