@@ -129,9 +129,8 @@ kf_cwpa_demo <- function(seed=666) {
     n <- length(M)
     p <- length(Y)
     MM <- matrix(0, n, p)
-    Plist <- vector(length=p, mode="list")
-    for (i in 1:p) Plist[[i]] <- matrix(0, n, n)
-    
+    PP <- array(0, dim=c(n, n, p))
+
     ## % Filtering steps.
     ## for i = 1:size(Y,2)
     ##    [m,P] = kf_predict(m,P,A,Q);
@@ -151,16 +150,42 @@ kf_cwpa_demo <- function(seed=666) {
         P <- rl[["P"]]
 
         MM[,i] <- M
-        Plist[[i]] = P
+        PP[,,i] <- P
     }
 
     ## % Smoothing step.
     ## [SM,SP] = rts_smooth(MM,PP,A,Q);
-    rl <- rtsSmoother(MM, Plist, A, Q)
+    rl <- rtsSmoother(MM, PP, A, Q)
     SM <- rl[["SM"]]
-    #SP <- rl[["SP"]]
+    SP <- rl[["SP"]]
     ## [SM2,SP2] = tf_smooth(MM,PP,Y,A,Q,H,R,1);
+    rl <- tfSmoother(MM, PP, Y, A, Q, H, R, TRUE)
+    SM2 <- rl[["SM2"]]
+    SP2 <- rl[["SP2"]]
+    
+    ## fprintf('ready.\n');
+    ## disp(' ');
+    ## disp('<push any button to see the results>');
+    ## pause
 
+    ## subplot(1,2,1);
+    ## plot(X_r(1,:), X_r(2,:),'--', MM(1,:), MM(2,:),X_r(1,1),X_r(2,1),...
+    ##      'o','MarkerSize',12)
+    ## legend('Real trajectory', 'Filtered'); 
+    ## title('Position estimation with Kalman filter.');
+    ## xlabel('x');
+    ## ylabel('y');
+
+    ## subplot(1,2,2);
+    ## plot(X_r(3,:), X_r(4,:),'--', MM(3,:), MM(4,:),X_r(3,1),...
+    ##      X_r(4,1),'ro','MarkerSize',12);
+    ## legend('Real velocity', 'Filtered');
+    ## title('Velocity estimation with Kalman filter.');
+    ## xlabel('x^.');
+    ## ylabel('y^.');
+
+    ## % Uncomment if you want to save an image
+    ## % print -dpsc demo1_f2.ps
 
     
 }
