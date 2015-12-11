@@ -67,6 +67,8 @@ Rcpp::List kfUpdate(const arma::vec & x, const arma::mat & P, const arma::vec & 
 Rcpp::List kfPredict(const arma::vec & x, const arma::mat & P, const arma::mat & A,
                      const arma::mat & Q, const arma::mat & B, const arma::vec & u);
 
+const bool verbose = true;
+
 // [[Rcpp::export]]
 Rcpp::List tfSmoother(arma::mat & M, 		
                       arma::cube & P,          
@@ -79,7 +81,7 @@ Rcpp::List tfSmoother(arma::mat & M,
     
     int n = M.n_rows;
     int k = M.n_cols;
-
+    if (verbose) Rcpp::Rcout << "n " << n << " k " << k << std::endl;
     // %
     // % Run the backward filter
     // %
@@ -125,11 +127,13 @@ Rcpp::List tfSmoother(arma::mat & M,
         arma::vec z = arma::zeros<arma::vec>(n);
         arma::mat S = arma::zeros<arma::mat>(n, n);
         for (int j=k-1; j>=0; j--) {
+            if (verbose) Rcpp::Rcout << "j " << j << std::endl;
             arma::mat rhs = S + IQ;
             arma::mat lhs = S;
             arma::mat G = arma::solve(rhs.t(), lhs.t()).t();  // cf ltidisc.cpp for discussion of solve
             S = A.t() * (arma::eye(n,n) - G) * S * A;
             z = A.t() * (arma::eye(n,n) - G) * z;
+            if (verbose) Rcpp::Rcout << z << std::endl;
             zz.col(j) = z;
             SS.slice(j) = S;
             S = S + H.t() * IR * H;
