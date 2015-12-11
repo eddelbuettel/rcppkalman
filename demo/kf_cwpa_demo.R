@@ -127,7 +127,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## MM = zeros(size(m,1), size(Y,2));
     ## PP = zeros(size(m,1), size(m,1), size(Y,2));
     n <- length(M)
-    p <- length(Y)
+    p <- ncol(Y)
     MM <- matrix(0, n, p)
     PP <- array(0, dim=c(n, n, p))
 
@@ -155,10 +155,12 @@ kf_cwpa_demo <- function(seed=666) {
 
     ## % Smoothing step.
     ## [SM,SP] = rts_smooth(MM,PP,A,Q);
+    print(dim(MM))
     rl <- rtsSmoother(MM, PP, A, Q)
     SM <- rl[["SM"]]
     SP <- rl[["SP"]]
     ## [SM2,SP2] = tf_smooth(MM,PP,Y,A,Q,H,R,1);
+    print(dim(MM))
     rl <- tfSmoother(MM, PP, Y, A, Q, H, R, TRUE)
     SM2 <- rl[["SM2"]]
     SP2 <- rl[["SP2"]]
