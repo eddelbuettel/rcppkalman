@@ -34,13 +34,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // kfUpdate
-Rcpp::List kfUpdate(const arma::vec& x, const arma::mat& P, const arma::vec& y, const arma::mat& H, const arma::mat& R);
+Rcpp::List kfUpdate(arma::vec& x, arma::mat& P, const arma::vec& y, const arma::mat& H, const arma::mat& R);
 RcppExport SEXP RcppKalman_kfUpdate(SEXP xSEXP, SEXP PSEXP, SEXP ySEXP, SEXP HSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type P(PSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);

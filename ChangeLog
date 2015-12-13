@@ -1,3 +1,12 @@
+2015-12-13  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/kfupdate.cpp: Non-const first two arguments, returning m and P
+
+	* src/tfsmooth.cpp: Non-const first two arguments, returning m and P;
+	correction in use of y argument
+
+	* demo/kf_cwpa_demo.R: Corrections, and temporal input from file
+
 2015-12-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/tfsmooth.cpp: First complete version
