@@ -109,55 +109,32 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::export]]
-Rcpp::List kfUpdate(const arma::vec & x,
-                    const arma::mat & P,
+Rcpp::List kfUpdate(arma::vec & x,
+                    arma::mat & P,
                     const arma::vec & y,
                     const arma::mat & H,
                     const arma::mat & R) {
 
-
     //   IM = H*X;
     arma::mat IM = H*x;
-
     //   IS = (R + H*P*H');
     arma::mat IS = (R + H * P* H.t());
     //   K = P*H'/IS;
     arma::mat lhs = P * H.t();
     arma::mat rhs = IS;
     arma::mat K = arma::solve(rhs.t(), lhs.t()).t();
-    //   X = X + K * (y-IM);
-    // Here 'y' (a scalar) gets expanded to dim(IM)x1 !!
-    arma::vec yy(IM.n_rows, arma::fill::ones);
-    yy = yy * y(0);
-    arma::vec newx = x + K * (yy-IM);
 
+    //   X = X + K * (y-IM);
+    x = x + K * (y - IM);
     //   P = P - K*IS*K';
-    arma::mat newP = P - K * IS * K.t();
+    P = P - K * IS * K.t();
 
     //if nargout > 5
     //   LH = gauss_pdf(y,IM,IS);
     //end
 
-#if 0
-    //    if (newx[0] != 0) {
-        x.print("x");
-        P.print("P");
-        y.print("y");
-        H.print("H");
-        R.print("R");
-        IM.print("IM");
-        IS.print("IS");
-        lhs.print("lhs");
-        rhs.print("rhs");
-        K.print("K");
-        newx.print("newx");
-        newP.print("newP");
-        Rcpp::stop("Now");
-        //}
-#endif
-
-    return Rcpp::List::create(Rcpp::Named("x") = newx,
-                              Rcpp::Named("P") = newP,
+    return Rcpp::List::create(Rcpp::Named("x") = x,
+                              Rcpp::Named("P") = P,
                               Rcpp::Named("K") = K,
                               Rcpp::Named("IS") = IS,
                               Rcpp::Named("IM") = IM);
