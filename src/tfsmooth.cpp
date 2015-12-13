@@ -62,7 +62,7 @@
 
 #include <RcppArmadillo.h>
 
-Rcpp::List kfUpdate(const arma::vec & x, const arma::mat & P, const arma::vec & y,
+Rcpp::List kfUpdate(arma::vec & x, arma::mat & P, const arma::vec & y,
                     const arma::mat & H, const arma::mat & R);
 Rcpp::List kfPredict(const arma::vec & x, const arma::mat & P, const arma::mat & A,
                      const arma::mat & Q, const arma::mat & B, const arma::vec & u);
