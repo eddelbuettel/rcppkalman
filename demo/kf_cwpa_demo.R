@@ -60,7 +60,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## R = diag([r1 r1]);
     r1 <- 10
     r2 <- 5
-    R <- diag(c(r1, r2))
+    R <- diag(c(r1, r1))
 
     ## % Generate the data.
     ## n = 50;
@@ -73,18 +73,22 @@ kf_cwpa_demo <- function(seed=666) {
     n <- 50
     Y <- matrix(0, nrow(H), n)
     Xr <- matrix(0, nrow(F), n)
-    for (i in 2:n) {
-        Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorm(1, rep(0, nrow(F)), Q)
-    }
+    #for (i in 2:n) {
+    #    Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorm(1, rep(0, nrow(F)), Q)
+    #}
+    Xr <- as.matrix(read.table("/tmp/Xr.mat"))
+    #print(dim(Xr))
 
     ## % Generate the measurements.
     ## for i = 1:n
     ##    Y(:,i) = H*X_r(:,i) + gauss_rnd(zeros(size(Y,1),1), R);
     ## end
-    for (i in 1:n) {
-        Y[,i] <- H %*% Xr[,i] + MASS::mvrnorm(1, rep(0, nrow(Y)), R)
-    }
-
+    #for (i in 1:n) {
+    #    Y[,i] <- H %*% Xr[,i] + MASS::mvrnorm(1, rep(0, nrow(Y)), R)
+    #}
+    Y <- as.matrix(read.table("/tmp/Y.mat"))
+    #print(dim(Y))
+    
     ## clf; clc;
     ## disp('This is a demonstration program for the classical Kalman filter.');
     ## disp(' ');
@@ -144,23 +148,20 @@ kf_cwpa_demo <- function(seed=666) {
         rl <- kfPredict(M, P, A, Q, B, u)
         M <- rl[["x"]]
         P <- rl[["P"]]
-
-        rl <- kfUpdate(M, P, Y[i], H, R)
+        rl <- kfUpdate(M, P, Y[,i], H, R)
         M <- rl[["x"]]
         P <- rl[["P"]]
 
         MM[,i] <- M
         PP[,,i] <- P
     }
-
+    
     ## % Smoothing step.
     ## [SM,SP] = rts_smooth(MM,PP,A,Q);
-    print(dim(MM))
     rl <- rtsSmoother(MM, PP, A, Q)
     SM <- rl[["SM"]]
     SP <- rl[["SP"]]
     ## [SM2,SP2] = tf_smooth(MM,PP,Y,A,Q,H,R,1);
-    print(dim(MM))
     rl <- tfSmoother(MM, PP, Y, A, Q, H, R, TRUE)
     SM2 <- rl[["SM2"]]
     SP2 <- rl[["SP2"]]
