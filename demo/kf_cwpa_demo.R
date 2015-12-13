@@ -179,6 +179,13 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x');
     ## ylabel('y');
 
+    op <- par(mfrow=c(1,2), mar=c(3,3,3,1))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue")
+    lines(MM[1,], MM[2,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topleft", c("Real Trajectory", "Filtered"),
+           lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
+    
     ## subplot(1,2,2);
     ## plot(X_r(3,:), X_r(4,:),'--', MM(3,:), MM(4,:),X_r(3,1),...
     ##      X_r(4,1),'ro','MarkerSize',12);
@@ -187,9 +194,18 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue")
+    lines(MM[3,], MM[4,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topleft", c("Real Velocity", "Filtered"),
+           lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
+
+    par(op)
+    
     ## % Uncomment if you want to save an image
     ## % print -dpsc demo1_f2.ps
 
+    
     
 }
 

@@ -5,7 +5,8 @@
 	* src/tfsmooth.cpp: Non-const first two arguments, returning m and P;
 	correction in use of y argument
 
-	* demo/kf_cwpa_demo.R: Corrections, and temporal input from file
+	* demo/kf_cwpa_demo.R: Corrections, temporal input from file, and two
+	more plots
 
 2015-12-06  Dirk Eddelbuettel  <edd@debian.org>
 
