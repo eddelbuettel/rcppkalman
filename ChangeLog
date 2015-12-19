@@ -1,3 +1,7 @@
+2015-12-19  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/rtssmooth.cpp: Return the cube P in result list
+
 2015-12-13  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/kfupdate.cpp: Non-const first two arguments, returning m and P

@@ -155,12 +155,8 @@ Rcpp::List rtsSmoother(arma::mat & M,
         P.slice(j) = P.slice(j) + D.slice(j) * (P.slice(j+1) - Ppred) * D.slice(j).t();
     }
 
-    Rcpp::List Pout(k);
-    for (int i=0; i<k; i++) {
-        Pout[i] = P.slice(i);
-    }
     return Rcpp::List::create(Rcpp::Named("SM") = M,
-                              Rcpp::Named("SP") = Pout,
+                              Rcpp::Named("SP") = P,
                               Rcpp::Named("D") = D);
 
 }
