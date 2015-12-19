@@ -1,5 +1,4 @@
 
-suppressMessages(library(xts))
 suppressMessages(library(RcppKalman))
 suppressMessages(library(RcppOctave))
 

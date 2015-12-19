@@ -1,5 +1,4 @@
 
-suppressMessages(library(xts))
 suppressMessages(library(RcppKalman))
 suppressMessages(library(RcppOctave))
 
@@ -47,7 +46,6 @@ call_kf_update <- function() {
     A <- rl[["A"]]
     Q <- rl[["Q"]]
 
-
     
     ## Measurement model.
     ##H = [1 0 0 0 0 0;
@@ -77,7 +75,7 @@ call_kf_update <- function() {
     P <- rl[["P"]]
 
     ##[m,P] = kf_update(m,P,vwap(ii,:),H,R);
-    rl <- kfUpdate(m, P, 150.75, H, R)
+    rl <- kfUpdate(m, P, rep(150.75,2), H, R)
     m <- rl[["x"]]
     P <- rl[["P"]]
     K <- rl[["K"]]
