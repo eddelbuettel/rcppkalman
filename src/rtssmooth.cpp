@@ -146,7 +146,7 @@ Rcpp::List rtsSmoother(arma::mat & M,
     //   end
     arma::cube D = arma::zeros<arma::cube>(n, n, k);
 
-    for (unsigned int j=k-1-1; j>0; j--) {
+    for (int j=k-1-1; j>=0; j--) {
         arma::mat Ppred = AA.slice(j) * P.slice(j) * AA.slice(j).t() + QQ.slice(j);
         arma::mat lhs = (P.slice(j) * AA.slice(j).t());
         arma::mat rhs = Ppred;

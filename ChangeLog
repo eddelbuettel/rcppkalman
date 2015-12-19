@@ -1,6 +1,6 @@
 2015-12-19  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/rtssmooth.cpp: Return the cube P in result list
+	* src/rtssmooth.cpp: Return the cube P in result list, correct indexing
 
 2015-12-13  Dirk Eddelbuettel  <edd@debian.org>
 

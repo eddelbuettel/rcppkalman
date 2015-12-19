@@ -11,7 +11,8 @@ S2 <- c(1.0, -0.2)
 stdev <- 0.1
 dt <- 0.1
 w <- 1
-Tseq <- seq(0, 30, by=dt)
+Tfinal <- 30
+Tseq <- seq(0, Tfinal, by=dt)
 X <- sin(w*Tseq)
 Y <- X + stdev * rnorm(length(X))
 
@@ -55,7 +56,7 @@ call_rts_smooth <- function(Y) {
     PP <- array(0, dim=c(n, n, p))
 
     for (k in 1:p) {
-    
+        
         ## %
         ## % Track with KF
         ## %
@@ -82,7 +83,7 @@ rl <- call_rts_smooth(Y)
 SM <- rl[["SM"]]
 rP <- SM[, ncol(SM), drop=FALSE]
 print( all.equal(mP,rP))
-print( all.equal(MM[,2:301], SM[,2:301])) # need to check why first is different
+print( all.equal(MM, SM)) 
 
 
 
