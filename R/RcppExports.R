@@ -33,8 +33,8 @@ kfPredict <- function(x, P, A, Q, B, u) {
     .Call('RcppKalman_kfPredict', PACKAGE = 'RcppKalman', x, P, A, Q, B, u)
 }
 
-kfUpdate <- function(x, P, y, H, R) {
-    .Call('RcppKalman_kfUpdate', PACKAGE = 'RcppKalman', x, P, y, H, R)
+kfUpdate <- function(xc, Pc, y, H, R) {
+    .Call('RcppKalman_kfUpdate', PACKAGE = 'RcppKalman', xc, Pc, y, H, R)
 }
 
 ltiDisc <- function(F, L, Q, dt) {
@@ -67,11 +67,11 @@ ltiDisc <- function(F, L, Q, dt) {
 #' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 #' @seealso The documentation for the EKF/UKF toolbox at
 #' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
-rtsSmoother <- function(M, P, A, Q) {
-    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', M, P, A, Q)
+rtsSmoother <- function(Mc, Pc, A, Q) {
+    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', Mc, Pc, A, Q)
 }
 
-tfSmoother <- function(M, P, Y, A, Q, H, R, useinf) {
-    .Call('RcppKalman_tfSmoother', PACKAGE = 'RcppKalman', M, P, Y, A, Q, H, R, useinf)
+tfSmoother <- function(Mc, Pc, Y, A, Q, H, R, useinf) {
+    .Call('RcppKalman_tfSmoother', PACKAGE = 'RcppKalman', Mc, Pc, Y, A, Q, H, R, useinf)
 }
 

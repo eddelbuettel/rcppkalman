@@ -21,7 +21,7 @@
 // %   IM - Mean of predictive distribution of Y
 // %   IS - Covariance or predictive mean of Y
 // %   LH - Predictive probability (likelihood) of measurement.
-// %   
+// %
 // % Description:
 // %   Kalman filter measurement update step. Kalman Filter
 // %   model is
@@ -35,7 +35,7 @@
 // %     p(x[k] | y[1:k-1]) = N(x[k] | m-[k], P-[k])
 // %
 // %   See for instance KF_PREDICT how m-[k] and P-[k] are
-// %   calculated. 
+// %   calculated.
 // %
 // %   Update step computes the posterior mean m[k] and
 // %   covariance P[k]  of state given new measurement:
@@ -45,13 +45,13 @@
 // %   Innovation distribution is defined as
 // %
 // %     p(y[k] | y[1:k-1]) = N(y[k] | IM[k], IS[k])
-// %   
+// %
 // %   Updated mean x[k] and covarience P[k] are given by
 // %   the following equations (not the only possible ones):
 // %
 // %     v[k] = y[k] - H[k]*m-[k]
 // %     S[k] = H[k]*P-[k]*H[k]' + R[k]
-// %     K[k] = P-[k]*H[k]'*[S[k]]^(-1) 
+// %     K[k] = P-[k]*H[k]'*[S[k]]^(-1)
 // %     m[k] = m-[k] + K[k]*v[k]
 // %     P[k] = P-[k] - K[k]*S[k]*K[k]'
 // %
@@ -79,8 +79,8 @@
 // %
 // % $Id: kf_update.m 111 2007-09-04 12:09:23Z ssarkka $
 // %
-// % This software is distributed under the GNU General Public 
-// % Licence (version 2 or later); please refer to the file 
+// % This software is distributed under the GNU General Public
+// % Licence (version 2 or later); please refer to the file
 // % Licence.txt, included with the software, for details.
 
 // function [X,P,K,IM,IS,LH] = kf_update(X,P,y,H,R)
@@ -109,12 +109,14 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::export]]
-Rcpp::List kfUpdate(arma::vec & x,
-                    arma::mat & P,
+Rcpp::List kfUpdate(const arma::vec & xc,
+                    const arma::mat & Pc,
                     const arma::vec & y,
                     const arma::mat & H,
                     const arma::mat & R) {
 
+    arma::vec x = xc;
+    arma::mat P = Pc;
     //   IM = H*X;
     arma::mat IM = H*x;
     //   IS = (R + H*P*H');

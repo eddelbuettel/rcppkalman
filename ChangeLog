@@ -1,6 +1,9 @@
 2015-12-19  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/rtssmooth.cpp: Return the cube P in result list, correct indexing
+	* src/rtssmooth.cpp: Return the cube P in result list, correct indexing,
+	revert to const arguments
+	* src/kfupdate.cpp: Revert to const first two arguments
+	* src/tfsmooth.cpp: Ditto
 
 2015-12-13  Dirk Eddelbuettel  <edd@debian.org>
 

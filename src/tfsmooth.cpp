@@ -62,20 +62,23 @@
 
 #include <RcppArmadillo.h>
 
-Rcpp::List kfUpdate(arma::vec & x, arma::mat & P, const arma::vec & y,
+Rcpp::List kfUpdate(const arma::vec & x, const arma::mat & P, const arma::vec & y,
                     const arma::mat & H, const arma::mat & R);
 Rcpp::List kfPredict(const arma::vec & x, const arma::mat & P, const arma::mat & A,
                      const arma::mat & Q, const arma::mat & B, const arma::vec & u);
 
 // [[Rcpp::export]]
-Rcpp::List tfSmoother(arma::mat & M, 		
-                      arma::cube & P,          
+Rcpp::List tfSmoother(const arma::mat & Mc, 		
+                      const arma::cube & Pc,          
                       const arma::mat & Y,
                       const arma::mat & A,
                       const arma::mat & Q,
                       const arma::mat & H,
                       const arma::mat & R,
                       const bool useinf) {
+
+    arma::mat M = Mc;
+    arma::cube P = Pc;
     
     int n = M.n_rows;
     int k = M.n_cols;

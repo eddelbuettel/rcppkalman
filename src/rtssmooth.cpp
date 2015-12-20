@@ -110,13 +110,16 @@
 //' @seealso The documentation for the EKF/UKF toolbox at
 //' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 // [[Rcpp::export]]
-Rcpp::List rtsSmoother(arma::mat & M, 		
-                       arma::cube & P,          
+Rcpp::List rtsSmoother(const arma::mat & Mc, 		
+                       const arma::cube & Pc,          
                        const arma::mat & A,
                        const arma::mat & Q) {
     
-    int n = M.n_rows;
-    int k = M.n_cols;
+    arma::mat M = Mc;
+    arma::cube P = Pc;
+    
+    int n = Mc.n_rows;
+    int k = Mc.n_cols;
 
     //   %
     //   % Extend A and Q if they are NxN matrices
