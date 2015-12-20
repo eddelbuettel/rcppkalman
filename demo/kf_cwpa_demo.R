@@ -2,8 +2,8 @@
 ## %
 ## % Copyright (C) 2007 Jouni Hartikainen
 ## %
-## % This software is distributed under the GNU General Public 
-## % Licence (version 2 or later); please refer to the file 
+## % This software is distributed under the GNU General Public
+## % Licence (version 2 or later); please refer to the file
 ## % Licence.txt, included with the software, for details.
 
 suppressMessages(library(RcppKalman))
@@ -11,7 +11,7 @@ suppressMessages(library(RcppKalman))
 kf_cwpa_demo <- function(seed=666) {
 
     set.seed(seed)
-    
+
     ## % Transition matrix for the continous-time system.
     ## F = [0 0 1 0 0 0;
     ##      0 0 0 1 0 0;
@@ -21,7 +21,7 @@ kf_cwpa_demo <- function(seed=666) {
     ##      0 0 0 0 0 0];
     F <- matrix(0, 6, 6)
     F[1,3] <- F[2,4] <- F[3,5] <- F[4,6] <- 1
-        
+
     ## % Noise effect matrix for the continous-time system.
     ## L = [0 0;
     ##      0 0;
@@ -31,17 +31,17 @@ kf_cwpa_demo <- function(seed=666) {
     ##      0 1];
     L <- matrix(0, 6, 2)
     L[5,1] <- L[6,2] <- 1
-        
+
     ## % Stepsize
     ## dt = 0.5;
     dt <- 0.5
-    
+
     ## % Process noise variance
     ## q = 0.2;
     ## Qc = diag([q q]);
     q <- 0.2
     Qc <- diag(c(q, q))
-    
+
     ## % Discretization of the continous-time system.
     ## [A,Q] = lti_disc(F,L,Qc,dt);
     rl <- ltiDisc(F, L, Qc, dt)
@@ -53,7 +53,7 @@ kf_cwpa_demo <- function(seed=666) {
     ##      0 1 0 0 0 0];
     H <- matrix(0, 2, 6)
     H[1,1] <- H[2,2] <- 1
-    
+
     ## % Variance in the measurements.
     ## r1 = 10;
     ## r2 = 5;
@@ -88,7 +88,7 @@ kf_cwpa_demo <- function(seed=666) {
     #}
     Y <- as.matrix(read.table("/tmp/Y.mat"))
     #print(dim(Y))
-    
+
     ## clf; clc;
     ## disp('This is a demonstration program for the classical Kalman filter.');
     ## disp(' ');
@@ -106,18 +106,18 @@ kf_cwpa_demo <- function(seed=666) {
     ## disp(' ');
     ## fprintf('Filtering with KF...');
     cat("This is a demonstration program for the classical Kalman filter.\n\n")
-    cat("KF is used here to estimate the position of a moving object, whose\n") 
+    cat("KF is used here to estimate the position of a moving object, whose\n")
     cat("dynamics follow the CWPA-model described in the documentation\n")
     cat("provided with the toolbox.\n")
-    
+
     ## plot(X_r(1,:),X_r(2,:),Y(1,:),Y(2,:),'.',X_r(1,1),...
     ##      X_r(2,1),'ro','MarkerSize',12);
     ## legend('Real trajectory', 'Measurements');
     ## title('Position');
-    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue")
+    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue", xlim=c(-150,50), ylim=c(-50,200))
     points(Y[1,], Y[2,], col="green", pch=18)
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
-    legend("topleft", c("Real Trajectory", "Measurements"),
+    legend("topright", c("Real Trajectory", "Measurements"),
            lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
 
 
@@ -126,7 +126,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## P = diag([0.1 0.1 0.1 0.1 0.5 0.5]);
     M <- rep(0, 6)
     P <- diag(c(0.1, 0.1, 0.1, 0.1, 0.5, 0.5))
-    
+
     ## %% Space for the estimates.
     ## MM = zeros(size(m,1), size(Y,2));
     ## PP = zeros(size(m,1), size(m,1), size(Y,2));
@@ -155,7 +155,7 @@ kf_cwpa_demo <- function(seed=666) {
         MM[,i] <- M
         PP[,,i] <- P
     }
-    
+
     ## % Smoothing step.
     ## [SM,SP] = rts_smooth(MM,PP,A,Q);
     rl <- rtsSmoother(MM, PP, A, Q)
@@ -163,9 +163,9 @@ kf_cwpa_demo <- function(seed=666) {
     SP <- rl[["SP"]]
     ## [SM2,SP2] = tf_smooth(MM,PP,Y,A,Q,H,R,1);
     rl <- tfSmoother(MM, PP, Y, A, Q, H, R, TRUE)
-    SM2 <- rl[["SM2"]]
-    SP2 <- rl[["SP2"]]
-    
+    SM2 <- rl[["M"]]
+    SP2 <- rl[["P"]]
+
     ## fprintf('ready.\n');
     ## disp(' ');
     ## disp('<push any button to see the results>');
@@ -174,18 +174,19 @@ kf_cwpa_demo <- function(seed=666) {
     ## subplot(1,2,1);
     ## plot(X_r(1,:), X_r(2,:),'--', MM(1,:), MM(2,:),X_r(1,1),X_r(2,1),...
     ##      'o','MarkerSize',12)
-    ## legend('Real trajectory', 'Filtered'); 
+    ## legend('Real trajectory', 'Filtered');
     ## title('Position estimation with Kalman filter.');
     ## xlabel('x');
     ## ylabel('y');
 
-    op <- par(mfrow=c(1,2), mar=c(3,3,3,1))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue")
+    op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
+         xlim=c(-150,50), ylim=c(-50,200))
     lines(MM[1,], MM[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
-    legend("topleft", c("Real Trajectory", "Filtered"),
-           lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
-    
+    legend("topright", c("Real Trajectory", "Filtered"),
+           lty=c(1,1), col=c("blue", "green"), bty="n")
+
     ## subplot(1,2,2);
     ## plot(X_r(3,:), X_r(4,:),'--', MM(3,:), MM(4,:),X_r(3,1),...
     ##      X_r(4,1),'ro','MarkerSize',12);
@@ -194,19 +195,78 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue")
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
+         xlim=c(-12,2), ylim=c(-5,20))
     lines(MM[3,], MM[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Velocity", "Filtered"),
-           lty=c(1,NA), pch=c(NA,18), col=c("blue", "green"), bty="n")
+           lty=c(1,1), col=c("blue", "green"), bty="n")
 
+    title("Kalman Filter Estimate", outer=TRUE, line=-1)
     par(op)
-    
+
     ## % Uncomment if you want to save an image
     ## % print -dpsc demo1_f2.ps
 
-    
-    
+
+    op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
+         xlim=c(-150,50), ylim=c(-50,200))
+    lines(SM[1,], SM[2,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topright", c("Real Trajectory", "Smoothed"),
+           lty=c(1,1), col=c("blue", "green"), bty="n")
+
+    ## subplot(1,2,2);
+    ## plot(X_r(3,:), X_r(4,:),'--', MM(3,:), MM(4,:),X_r(3,1),...
+    ##      X_r(4,1),'ro','MarkerSize',12);
+    ## legend('Real velocity', 'Filtered');
+    ## title('Velocity estimation with Kalman filter.');
+    ## xlabel('x^.');
+    ## ylabel('y^.');
+
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
+         xlim=c(-12,2), ylim=c(-5,20))
+    lines(SM[3,], SM[4,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topleft", c("Real Velocity", "Smoothed"),
+           lty=c(1,1), col=c("blue", "green"), bty="n")
+
+    title("RTS Smoother Estimate", outer=TRUE, line=-1)
+    par(op)
+
+
+
+
+
+
+    op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
+         xlim=c(-150,50), ylim=c(-50,200))
+    lines(SM2[1,], SM2[2,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topright", c("Real Trajectory", "Smoothed"),
+           lty=c(1,1), col=c("blue", "green"), bty="n")
+
+    ## subplot(1,2,2);
+    ## plot(X_r(3,:), X_r(4,:),'--', MM(3,:), MM(4,:),X_r(3,1),...
+    ##      X_r(4,1),'ro','MarkerSize',12);
+    ## legend('Real velocity', 'Filtered');
+    ## title('Velocity estimation with Kalman filter.');
+    ## xlabel('x^.');
+    ## ylabel('y^.');
+
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
+         xlim=c(-12,2), ylim=c(-5,20))
+    lines(SM2[3,], SM2[4,], col="green")
+    points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
+    legend("topright", c("Real Velocity", "Smoothed"),
+           lty=c(1,1), col=c("blue", "green"), bty="n")
+
+    title("TF Smoother Estimate", outer=TRUE, line=-1)
+    par(op)
+
+
 }
 
 kf_cwpa_demo()

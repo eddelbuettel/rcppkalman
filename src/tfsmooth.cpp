@@ -179,7 +179,7 @@ Rcpp::List tfSmoother(const arma::mat & Mc,
             arma::mat rhs = arma::eye(n, n) + P.slice(j) * SS.slice(j);
             arma::mat lhs = P.slice(j) * SS.slice(j);
             arma::mat G = arma::solve(rhs.t(), lhs.t()).t();  // cf ltidisc.cpp for discussion of solve
-            P.slice(j) = arma::inv(arma::inv(P.slice(j) + SS.slice(j)));
+            P.slice(j) = arma::inv(arma::inv(P.slice(j)) + SS.slice(j));
             M.col(j) = M.col(j) + P.slice(j) * zz.col(j) - G * M.col(j);
         }
     } else {
