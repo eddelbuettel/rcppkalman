@@ -2,3 +2,4 @@ src/copies
 tests/old
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.travis.yml
