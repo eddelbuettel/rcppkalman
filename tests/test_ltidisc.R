@@ -3,6 +3,8 @@ suppressMessages(library(xts))
 suppressMessages(library(RcppKalman))
 if (requireNamespace("RcppOctave", quietly=TRUE)) {
 
+    suppressMessages(library(RcppOctave))
+
     setwd("~/git/rcppkalman/tests/")
 
     o_source(file = "call_lti_disc.m")

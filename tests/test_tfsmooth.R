@@ -2,6 +2,8 @@
 suppressMessages(library(RcppKalman))
 if (requireNamespace("RcppOctave", quietly=TRUE)) {
 
+    suppressMessages(library(RcppOctave))
+
     setwd("~/git/rcppkalman/tests/")
 
     ## data generation as in the demo 'kf_sine_demo'

@@ -73,21 +73,17 @@ kf_cwpa_demo <- function(seed=666) {
     n <- 50
     Y <- matrix(0, nrow(H), n)
     Xr <- matrix(0, nrow(F), n)
-    #for (i in 2:n) {
-    #    Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorm(1, rep(0, nrow(F)), Q)
-    #}
-    Xr <- as.matrix(read.table("/tmp/Xr.mat"))
-    #print(dim(Xr))
+    for (i in 2:n) {
+        Xr[, i] <- A %*% Xr[, i-1] + MASS::mvrnorm(1, rep(0, nrow(F)), Q)
+    }
 
     ## % Generate the measurements.
     ## for i = 1:n
     ##    Y(:,i) = H*X_r(:,i) + gauss_rnd(zeros(size(Y,1),1), R);
     ## end
-    #for (i in 1:n) {
-    #    Y[,i] <- H %*% Xr[,i] + MASS::mvrnorm(1, rep(0, nrow(Y)), R)
-    #}
-    Y <- as.matrix(read.table("/tmp/Y.mat"))
-    #print(dim(Y))
+    for (i in 1:n) {
+        Y[,i] <- H %*% Xr[,i] + MASS::mvrnorm(1, rep(0, nrow(Y)), R)
+    }
 
     ## clf; clc;
     ## disp('This is a demonstration program for the classical Kalman filter.');
@@ -108,13 +104,20 @@ kf_cwpa_demo <- function(seed=666) {
     cat("This is a demonstration program for the classical Kalman filter.\n\n")
     cat("KF is used here to estimate the position of a moving object, whose\n")
     cat("dynamics follow the CWPA-model described in the documentation\n")
-    cat("provided with the toolbox.\n")
+    cat("provided with the toolbox.\n\n")
+    cat("We get noisy measurements from the objects position and velocity\n")
+    cat("on discrete time steps. The real position of the object and the\n")
+    cat("measurements made of them are displayed now. The blue line is the\n")
+    cat("real path of the object and the green dots represents the\n")
+    cat("measurements. The red circle represents the starting point\n")
+    cat("of the object.\n\n")
+
 
     ## plot(X_r(1,:),X_r(2,:),Y(1,:),Y(2,:),'.',X_r(1,1),...
     ##      X_r(2,1),'ro','MarkerSize',12);
     ## legend('Real trajectory', 'Measurements');
     ## title('Position');
-    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue", xlim=c(-150,50), ylim=c(-50,200))
+    plot(Xr[1,], Xr[2,], type='l', main="Position", xlab="", ylab="", col="blue")
     points(Y[1,], Y[2,], col="green", pch=18)
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Measurements"),
@@ -171,6 +174,10 @@ kf_cwpa_demo <- function(seed=666) {
     ## disp('<push any button to see the results>');
     ## pause
 
+    cat("The filtering results are displayed now. In the left panel the\n")
+    cat("estimated path is shown, and, for comparison, in the right panel\n")
+    cat("the estimated velocity is shown.\n\n")
+
     ## subplot(1,2,1);
     ## plot(X_r(1,:), X_r(2,:),'--', MM(1,:), MM(2,:),X_r(1,1),X_r(2,1),...
     ##      'o','MarkerSize',12)
@@ -180,8 +187,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## ylabel('y');
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
-         xlim=c(-150,50), ylim=c(-50,200))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
     lines(MM[1,], MM[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Filtered"),
@@ -195,8 +201,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
-         xlim=c(-12,2), ylim=c(-5,20))
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
     lines(MM[3,], MM[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Velocity", "Filtered"),
@@ -208,10 +213,12 @@ kf_cwpa_demo <- function(seed=666) {
     ## % Uncomment if you want to save an image
     ## % print -dpsc demo1_f2.ps
 
+    cat("The smoothing results are displayed now. In the left panel the\n")
+    cat("estimated path is shown, and, for comparison, in the right panel\n")
+    cat("the estimated velocity is shown.\n\n")
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
-         xlim=c(-150,50), ylim=c(-50,200))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
     lines(SM[1,], SM[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Smoothed"),
@@ -225,8 +232,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
-         xlim=c(-12,2), ylim=c(-5,20))
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
     lines(SM[3,], SM[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Velocity", "Smoothed"),
@@ -241,8 +247,7 @@ kf_cwpa_demo <- function(seed=666) {
 
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue",
-         xlim=c(-150,50), ylim=c(-50,200))
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
     lines(SM2[1,], SM2[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Smoothed"),
@@ -256,8 +261,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue",
-         xlim=c(-12,2), ylim=c(-5,20))
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
     lines(SM2[3,], SM2[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Velocity", "Smoothed"),
