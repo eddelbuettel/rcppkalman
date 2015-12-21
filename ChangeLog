@@ -1,6 +1,12 @@
 2015-12-21  Dirk Eddelbuettel  <edd@debian.org>
 
-	* .travis.yml: Added for Travis Continuous Integration 
+	* .travis.yml: Added for Travis Continuous Integration, but for now
+	exclude r-cran-rcppoctave which is currently uninstallable
+	* tests/test_kfpredict.R: Now conditional on R
+	* tests/test_kfupdate.R: Idem
+	* tests/test_ltidisc.R: Idem
+	* tests/test_rtssmooth.R: Idem
+	* tests/test_tfsmooth.R: Idem
 
 2015-12-20  Dirk Eddelbuettel  <edd@debian.org>
 

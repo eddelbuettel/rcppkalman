@@ -11,6 +11,7 @@ dist: trusty
 
 env:
   global:
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
 
@@ -22,7 +23,7 @@ before_install:
   - sudo apt-get update -q
 
 install:
-  - ./travis-tool.sh install_aptget r-cran-rcpp r-cran-rcpparmadillo r-cran-rcppoctave r-cran-xts r-cran-expm
+  - ./travis-tool.sh install_aptget r-cran-rcpp r-cran-rcpparmadillo r-cran-xts r-cran-expm
 
 script: 
   - ./travis-tool.sh run_tests
