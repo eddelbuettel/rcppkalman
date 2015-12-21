@@ -29,23 +29,88 @@ expm <- function(x) {
     .Call('RcppKalman_expm', PACKAGE = 'RcppKalman', x)
 }
 
+#' This function performs the Kalman Filter prediction step
+#' 
+#' @title Kalman Filter Prediction step
+#' @param x An N x 1 mean state estimate of previous step
+#' @param P An N x N state covariance of previous step
+#' @param A (Optional, default idendity) transition matrix of the discrete model 
+#' @param Q (Optional, default zero) process noise of discrete model
+#' @param B (Optional, default idendity) input effect matrix  
+#' @param u (Optional, default empty) constant input
+#' @return A list with two elements
+#' \describe{
+#'   \item{X}{the predicted state mean, and}
+#'   \item{P}{the predicted state covariance.}
+#' }   
+#' @seealso \link{kfUpdate}, \link{ltiDisc} and 
+#' the documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+#' and Arno Solin.
+#'
+#' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 kfPredict <- function(x, P, A, Q, B, u) {
     .Call('RcppKalman_kfPredict', PACKAGE = 'RcppKalman', x, P, A, Q, B, u)
 }
 
-kfUpdate <- function(xc, Pc, y, H, R) {
-    .Call('RcppKalman_kfUpdate', PACKAGE = 'RcppKalman', xc, Pc, y, H, R)
+#' This function performs the Kalman Filter measurement update step
+#' 
+#' This functions performs the Kalman Filter measurement update step.
+#' @title Kalman Filter measurement update step
+#' @param x An N x 1 mean state estimate after prediction step
+#' @param P An N x N state covariance after prediction step
+#' @param y A D x 1 measurement vector.
+#' @param H Measurement matrix.
+#' @param R Measurement noise covariance.
+#' @return A list with elements
+#' \describe{
+#'   \item{X}{the update state mean,}
+#'   \item{P}{the update state covariance,}
+#'   \item{K}{the computed Kalman gain,}
+#'   \item{IM}{the mean of the predictive distribution of Y, and}
+#'   \item{IS}{the covariance of the predictive distribution of Y}
+#' }
+#' @seealso \link{kfPredict} and 
+#' the documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+#' and Arno Solin.
+#'
+#' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
+kfUpdate <- function(x, P, y, H, R) {
+    .Call('RcppKalman_kfUpdate', PACKAGE = 'RcppKalman', x, P, y, H, R)
 }
 
+#' Discretize Linear Time-Invariant ODE with Gaussian Noise
+#'
+#' This function discretizes the linear time-invariant (LTI)
+#' ordinary differential equation (ODE).
+#' @title Discretize Linear Time-Invariant ODE
+#' @param F An N x N feedback matrix
+#' @param L (Optional, default idendity) N x L noise effect matrix
+#' @param Q (Optionalm default zeros) L x L diagonal spectral density
+#' @param dt (Option, default one) time step
+#' @return A list with elements
+#' \describe{
+#'   \item{A}{the transition matrix, and}
+#'   \item{Q}{the discrete process covariance}
+#' }
+#' @seealso The documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+#' and Arno Solin.
+#'
+#' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 ltiDisc <- function(F, L, Q, dt) {
     .Call('RcppKalman_ltiDisc', PACKAGE = 'RcppKalman', F, L, Q, dt)
 }
 
-#' The function computes the Rauch-Tung-Striebel smoother.
+#' This function computes the Rauch-Tung-Striebel smoother.
 #'
 #' This function implements the Rauch-Tung-Striebel smoother algorithm which
-#' calculate a "smoothed" sequence from the given Kalman filter output sequence
-#' by conditioning all steps to all measurements.
+#' calculate a \dQuote{smoothed} sequence from the given Kalman filter output 
+#' sequence by conditioning all steps to all measurements.
 #'
 #' @title Rauch-Tung-Striebel smoother
 #' @param M An N x K matrix of K mean estimates from the Kalman Filter
@@ -61,17 +126,46 @@ ltiDisc <- function(F, L, Q, dt) {
 #'   \item{SP}{the smooted state covariance sequence,and }
 #'   \item{D}{the smoothed gain sequence.}
 #' }
+#' @seealso \link{kfPredict}, \link{kfUpdate}, and 
+#' the documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 #' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
 #' and Arno Solin.
 #'
 #' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
-#' @seealso The documentation for the EKF/UKF toolbox at
-#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
-rtsSmoother <- function(Mc, Pc, A, Q) {
-    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', Mc, Pc, A, Q)
+rtsSmoother <- function(M, P, A, Q) {
+    .Call('RcppKalman_rtsSmoother', PACKAGE = 'RcppKalman', M, P, A, Q)
 }
 
-tfSmoother <- function(Mc, Pc, Y, A, Q, H, R, useinf) {
-    .Call('RcppKalman_tfSmoother', PACKAGE = 'RcppKalman', Mc, Pc, Y, A, Q, H, R, useinf)
+#' This function computes the \sQuote{Two filter-based} Smoother
+#'
+#' This function implements the two filter linear smoother which calculates
+#' a \dQuote{smoothed} sequence from the given Kalman filter output sequence
+#' by conditioning all steps to all measurements.
+#'
+#' @title Two-filter Smoother
+#' @param M An N x K matrix of K mean estimates from Kalman filter
+#' @param P An N x N x K matrix of K state covariances from Kalman Filter
+#' @param Y A D x K matrix of K measurement sequences
+#' @param A A N x N state transition matrix.
+#' @param Q A N x N process noise covariance matrix.
+#' @param H A D x N measurement matrix.
+#' @param R A D x D measurement noise covariance.
+#' @param useinf An optional boolean variable indicating if information
+#' filter should be used (with default \code{true}). 
+#' @return A list with two elements
+#' \describe{
+#'   \item{M}{the smoothed state mean sequence, and}
+#'   \item{P}{the smoothes state covariance sequence.}
+#' }   
+#' @seealso \link{kfPredict}, \link{kfUpdate}, and 
+#' the documentation for the EKF/UKF toolbox at
+#' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+#' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+#' and Arno Solin.
+#'
+#' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
+tfSmoother <- function(M, P, Y, A, Q, H, R, useinf) {
+    .Call('RcppKalman_tfSmoother', PACKAGE = 'RcppKalman', M, P, Y, A, Q, H, R, useinf)
 }
 

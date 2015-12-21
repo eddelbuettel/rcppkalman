@@ -104,39 +104,63 @@
 //     LH = gauss_pdf(y,IM,IS);
 //   end
 
-
+// TODO : SeeAlso add EKF_UPDATE
 
 #include <RcppArmadillo.h>
 
+//' This function performs the Kalman Filter measurement update step
+//' 
+//' This functions performs the Kalman Filter measurement update step.
+//' @title Kalman Filter measurement update step
+//' @param x An N x 1 mean state estimate after prediction step
+//' @param P An N x N state covariance after prediction step
+//' @param y A D x 1 measurement vector.
+//' @param H Measurement matrix.
+//' @param R Measurement noise covariance.
+//' @return A list with elements
+//' \describe{
+//'   \item{X}{the update state mean,}
+//'   \item{P}{the update state covariance,}
+//'   \item{K}{the computed Kalman gain,}
+//'   \item{IM}{the mean of the predictive distribution of Y, and}
+//'   \item{IS}{the covariance of the predictive distribution of Y}
+//' }
+//' @seealso \link{kfPredict} and 
+//' the documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+//' and Arno Solin.
+//'
+//' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 // [[Rcpp::export]]
-Rcpp::List kfUpdate(const arma::vec & xc,
-                    const arma::mat & Pc,
+Rcpp::List kfUpdate(const arma::vec & x,
+                    const arma::mat & P,
                     const arma::vec & y,
                     const arma::mat & H,
                     const arma::mat & R) {
 
-    arma::vec x = xc;
-    arma::mat P = Pc;
+    arma::vec xv = x;
+    arma::mat Pv = P;
     //   IM = H*X;
-    arma::mat IM = H*x;
+    arma::mat IM = H*xv;
     //   IS = (R + H*P*H');
-    arma::mat IS = (R + H * P* H.t());
+    arma::mat IS = (R + H * Pv* H.t());
     //   K = P*H'/IS;
-    arma::mat lhs = P * H.t();
+    arma::mat lhs = Pv * H.t();
     arma::mat rhs = IS;
     arma::mat K = arma::solve(rhs.t(), lhs.t()).t();
 
     //   X = X + K * (y-IM);
-    x = x + K * (y - IM);
+    xv = xv + K * (y - IM);
     //   P = P - K*IS*K';
-    P = P - K * IS * K.t();
+    Pv = Pv - K * IS * K.t();
 
     //if nargout > 5
     //   LH = gauss_pdf(y,IM,IS);
     //end
 
-    return Rcpp::List::create(Rcpp::Named("x") = x,
-                              Rcpp::Named("P") = P,
+    return Rcpp::List::create(Rcpp::Named("x") = xv,
+                              Rcpp::Named("P") = Pv,
                               Rcpp::Named("K") = K,
                               Rcpp::Named("IS") = IS,
                               Rcpp::Named("IM") = IM);

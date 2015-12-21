@@ -34,17 +34,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // kfUpdate
-Rcpp::List kfUpdate(const arma::vec& xc, const arma::mat& Pc, const arma::vec& y, const arma::mat& H, const arma::mat& R);
-RcppExport SEXP RcppKalman_kfUpdate(SEXP xcSEXP, SEXP PcSEXP, SEXP ySEXP, SEXP HSEXP, SEXP RSEXP) {
+Rcpp::List kfUpdate(const arma::vec& x, const arma::mat& P, const arma::vec& y, const arma::mat& H, const arma::mat& R);
+RcppExport SEXP RcppKalman_kfUpdate(SEXP xSEXP, SEXP PSEXP, SEXP ySEXP, SEXP HSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const arma::vec& >::type xc(xcSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Pc(PcSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type P(PSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
-    __result = Rcpp::wrap(kfUpdate(xc, Pc, y, H, R));
+    __result = Rcpp::wrap(kfUpdate(x, P, y, H, R));
     return __result;
 END_RCPP
 }
@@ -63,34 +63,34 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtsSmoother
-Rcpp::List rtsSmoother(const arma::mat& Mc, const arma::cube& Pc, const arma::mat& A, const arma::mat& Q);
-RcppExport SEXP RcppKalman_rtsSmoother(SEXP McSEXP, SEXP PcSEXP, SEXP ASEXP, SEXP QSEXP) {
+Rcpp::List rtsSmoother(const arma::mat& M, const arma::cube& P, const arma::mat& A, const arma::mat& Q);
+RcppExport SEXP RcppKalman_rtsSmoother(SEXP MSEXP, SEXP PSEXP, SEXP ASEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const arma::mat& >::type Mc(McSEXP);
-    Rcpp::traits::input_parameter< const arma::cube& >::type Pc(PcSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type P(PSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
-    __result = Rcpp::wrap(rtsSmoother(Mc, Pc, A, Q));
+    __result = Rcpp::wrap(rtsSmoother(M, P, A, Q));
     return __result;
 END_RCPP
 }
 // tfSmoother
-Rcpp::List tfSmoother(const arma::mat& Mc, const arma::cube& Pc, const arma::mat& Y, const arma::mat& A, const arma::mat& Q, const arma::mat& H, const arma::mat& R, const bool useinf);
-RcppExport SEXP RcppKalman_tfSmoother(SEXP McSEXP, SEXP PcSEXP, SEXP YSEXP, SEXP ASEXP, SEXP QSEXP, SEXP HSEXP, SEXP RSEXP, SEXP useinfSEXP) {
+Rcpp::List tfSmoother(const arma::mat& M, const arma::cube& P, const arma::mat& Y, const arma::mat& A, const arma::mat& Q, const arma::mat& H, const arma::mat& R, const bool useinf);
+RcppExport SEXP RcppKalman_tfSmoother(SEXP MSEXP, SEXP PSEXP, SEXP YSEXP, SEXP ASEXP, SEXP QSEXP, SEXP HSEXP, SEXP RSEXP, SEXP useinfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const arma::mat& >::type Mc(McSEXP);
-    Rcpp::traits::input_parameter< const arma::cube& >::type Pc(PcSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type P(PSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type H(HSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
     Rcpp::traits::input_parameter< const bool >::type useinf(useinfSEXP);
-    __result = Rcpp::wrap(tfSmoother(Mc, Pc, Y, A, Q, H, R, useinf));
+    __result = Rcpp::wrap(tfSmoother(M, P, Y, A, Q, H, R, useinf));
     return __result;
 END_RCPP
 }

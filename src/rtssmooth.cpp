@@ -83,11 +83,11 @@
 
 
 
-//' The function computes the Rauch-Tung-Striebel smoother.
+//' This function computes the Rauch-Tung-Striebel smoother.
 //'
 //' This function implements the Rauch-Tung-Striebel smoother algorithm which
-//' calculate a "smoothed" sequence from the given Kalman filter output sequence
-//' by conditioning all steps to all measurements.
+//' calculate a \dQuote{smoothed} sequence from the given Kalman filter output 
+//' sequence by conditioning all steps to all measurements.
 //'
 //' @title Rauch-Tung-Striebel smoother
 //' @param M An N x K matrix of K mean estimates from the Kalman Filter
@@ -103,23 +103,24 @@
 //'   \item{SP}{the smooted state covariance sequence,and }
 //'   \item{D}{the smoothed gain sequence.}
 //' }
+//' @seealso \link{kfPredict}, \link{kfUpdate}, and 
+//' the documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 //' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
 //' and Arno Solin.
 //'
 //' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
-//' @seealso The documentation for the EKF/UKF toolbox at
-//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 // [[Rcpp::export]]
-Rcpp::List rtsSmoother(const arma::mat & Mc, 		
-                       const arma::cube & Pc,          
+Rcpp::List rtsSmoother(const arma::mat & M, 		
+                       const arma::cube & P,          
                        const arma::mat & A,
                        const arma::mat & Q) {
     
-    arma::mat M = Mc;
-    arma::cube P = Pc;
+    arma::mat Mv = M;
+    arma::cube Pv = P;
     
-    int n = Mc.n_rows;
-    int k = Mc.n_cols;
+    int n = M.n_rows;
+    int k = M.n_cols;
 
     //   %
     //   % Extend A and Q if they are NxN matrices
@@ -150,16 +151,16 @@ Rcpp::List rtsSmoother(const arma::mat & Mc,
     arma::cube D = arma::zeros<arma::cube>(n, n, k);
 
     for (int j=k-1-1; j>=0; j--) {
-        arma::mat Ppred = AA.slice(j) * P.slice(j) * AA.slice(j).t() + QQ.slice(j);
-        arma::mat lhs = (P.slice(j) * AA.slice(j).t());
+        arma::mat Ppred = AA.slice(j) * Pv.slice(j) * AA.slice(j).t() + QQ.slice(j);
+        arma::mat lhs = (Pv.slice(j) * AA.slice(j).t());
         arma::mat rhs = Ppred;
         D.slice(j) = arma::solve(rhs.t(), lhs.t()).t();
-        M.col(j) = M.col(j) + D.slice(j) * (M.col(j+1) - AA.slice(j) * M.col(j));
-        P.slice(j) = P.slice(j) + D.slice(j) * (P.slice(j+1) - Ppred) * D.slice(j).t();
+        Mv.col(j) = Mv.col(j) + D.slice(j) * (Mv.col(j+1) - AA.slice(j) * Mv.col(j));
+        Pv.slice(j) = Pv.slice(j) + D.slice(j) * (Pv.slice(j+1) - Ppred) * D.slice(j).t();
     }
 
-    return Rcpp::List::create(Rcpp::Named("SM") = M,
-                              Rcpp::Named("SP") = P,
+    return Rcpp::List::create(Rcpp::Named("SM") = Mv,
+                              Rcpp::Named("SP") = Pv,
                               Rcpp::Named("D") = D);
 
 }

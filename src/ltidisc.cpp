@@ -89,6 +89,26 @@
 
 arma::mat expm(arma::mat m);    // from expmMat.cpp
 
+//' Discretize Linear Time-Invariant ODE with Gaussian Noise
+//'
+//' This function discretizes the linear time-invariant (LTI)
+//' ordinary differential equation (ODE).
+//' @title Discretize Linear Time-Invariant ODE
+//' @param F An N x N feedback matrix
+//' @param L (Optional, default idendity) N x L noise effect matrix
+//' @param Q (Optionalm default zeros) L x L diagonal spectral density
+//' @param dt (Option, default one) time step
+//' @return A list with elements
+//' \describe{
+//'   \item{A}{the transition matrix, and}
+//'   \item{Q}{the discrete process covariance}
+//' }
+//' @seealso The documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+//' and Arno Solin.
+//'
+//' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 // [[Rcpp::export]]
 Rcpp::List ltiDisc(const arma::mat & F,
                    const arma::mat & L,

@@ -27,12 +27,12 @@ A list with three elements
 }
 }
 \description{
-The function computes the Rauch-Tung-Striebel smoother.
+This function computes the Rauch-Tung-Striebel smoother.
 }
 \details{
 This function implements the Rauch-Tung-Striebel smoother algorithm which
-calculate a "smoothed" sequence from the given Kalman filter output sequence
-by conditioning all steps to all measurements.
+calculate a \dQuote{smoothed} sequence from the given Kalman filter output 
+sequence by conditioning all steps to all measurements.
 }
 \author{
 The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
@@ -41,7 +41,8 @@ and Arno Solin.
 Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 }
 \seealso{
-The documentation for the EKF/UKF toolbox at
+\link{kfPredict}, \link{kfUpdate}, and 
+the documentation for the EKF/UKF toolbox at
 \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
 }
 

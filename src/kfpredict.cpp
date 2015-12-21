@@ -99,6 +99,29 @@
 
 #include <RcppArmadillo.h>
 
+// TODO   See also:  KF_UPDATE, LTI_DISC, EKF_PREDICT, EKF_UPDATE
+
+//' This function performs the Kalman Filter prediction step
+//' 
+//' @title Kalman Filter Prediction step
+//' @param x An N x 1 mean state estimate of previous step
+//' @param P An N x N state covariance of previous step
+//' @param A (Optional, default idendity) transition matrix of the discrete model 
+//' @param Q (Optional, default zero) process noise of discrete model
+//' @param B (Optional, default idendity) input effect matrix  
+//' @param u (Optional, default empty) constant input
+//' @return A list with two elements
+//' \describe{
+//'   \item{X}{the predicted state mean, and}
+//'   \item{P}{the predicted state covariance.}
+//' }   
+//' @seealso \link{kfUpdate}, \link{ltiDisc} and 
+//' the documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+//' and Arno Solin.
+//'
+//' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 // [[Rcpp::export]]
 Rcpp::List kfPredict(const arma::vec & x,
                      const arma::mat & P,

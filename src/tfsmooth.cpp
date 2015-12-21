@@ -67,9 +67,37 @@ Rcpp::List kfUpdate(const arma::vec & x, const arma::mat & P, const arma::vec & 
 Rcpp::List kfPredict(const arma::vec & x, const arma::mat & P, const arma::mat & A,
                      const arma::mat & Q, const arma::mat & B, const arma::vec & u);
 
+//' This function computes the \sQuote{Two filter-based} Smoother
+//'
+//' This function implements the two filter linear smoother which calculates
+//' a \dQuote{smoothed} sequence from the given Kalman filter output sequence
+//' by conditioning all steps to all measurements.
+//'
+//' @title Two-filter Smoother
+//' @param M An N x K matrix of K mean estimates from Kalman filter
+//' @param P An N x N x K matrix of K state covariances from Kalman Filter
+//' @param Y A D x K matrix of K measurement sequences
+//' @param A A N x N state transition matrix.
+//' @param Q A N x N process noise covariance matrix.
+//' @param H A D x N measurement matrix.
+//' @param R A D x D measurement noise covariance.
+//' @param useinf An optional boolean variable indicating if information
+//' filter should be used (with default \code{true}). 
+//' @return A list with two elements
+//' \describe{
+//'   \item{M}{the smoothed state mean sequence, and}
+//'   \item{P}{the smoothes state covariance sequence.}
+//' }   
+//' @seealso \link{kfPredict}, \link{kfUpdate}, and 
+//' the documentation for the EKF/UKF toolbox at
+//' \url{http://becs.aalto.fi/en/research/bayes/ekfukf}
+//' @author The EKF/UKF Toolbox was written by Simo Särkkä, Jouni Hartikainen,
+//' and Arno Solin.
+//'
+//' Dirk Eddelbuettel is porting this package to R and C++, and maintaing it.
 // [[Rcpp::export]]
-Rcpp::List tfSmoother(const arma::mat & Mc, 		
-                      const arma::cube & Pc,          
+Rcpp::List tfSmoother(const arma::mat & M, 		
+                      const arma::cube & P,          
                       const arma::mat & Y,
                       const arma::mat & A,
                       const arma::mat & Q,
@@ -77,11 +105,11 @@ Rcpp::List tfSmoother(const arma::mat & Mc,
                       const arma::mat & R,
                       const bool useinf) {
 
-    arma::mat M = Mc;
-    arma::cube P = Pc;
+    arma::mat Mv = M;
+    arma::cube Pv = P;
     
-    int n = M.n_rows;
-    int k = M.n_cols;
+    int n = Mv.n_rows;
+    int k = Mv.n_cols;
     // %
     // % Run the backward filter
     // %
@@ -176,21 +204,21 @@ Rcpp::List tfSmoother(const arma::mat & Mc,
     // end
     if (useinf) {
         for (int j=0; j<k-1; j++) {
-            arma::mat rhs = arma::eye(n, n) + P.slice(j) * SS.slice(j);
-            arma::mat lhs = P.slice(j) * SS.slice(j);
+            arma::mat rhs = arma::eye(n, n) + Pv.slice(j) * SS.slice(j);
+            arma::mat lhs = Pv.slice(j) * SS.slice(j);
             arma::mat G = arma::solve(rhs.t(), lhs.t()).t();  // cf ltidisc.cpp for discussion of solve
-            P.slice(j) = arma::inv(arma::inv(P.slice(j)) + SS.slice(j));
-            M.col(j) = M.col(j) + P.slice(j) * zz.col(j) - G * M.col(j);
+            Pv.slice(j) = arma::inv(arma::inv(Pv.slice(j)) + SS.slice(j));
+            Mv.col(j) = Mv.col(j) + Pv.slice(j) * zz.col(j) - G * Mv.col(j);
         }
     } else {
         for (int j=0; j<k-1; j++) {
-            arma::mat tmp = arma::inv(arma::inv(P.slice(j) + inv(BP.slice(j))));
-            M.col(j) = tmp * (arma::solve(P.slice(j), M.col(j)) + arma::solve(BP.slice(j), BM.col(j)));
-            P.slice(j) = tmp;
+            arma::mat tmp = arma::inv(arma::inv(Pv.slice(j) + inv(BP.slice(j))));
+            Mv.col(j) = tmp * (arma::solve(Pv.slice(j), Mv.col(j)) + arma::solve(BP.slice(j), BM.col(j)));
+            Pv.slice(j) = tmp;
         }
     }
 
-    return Rcpp::List::create(Rcpp::Named("M") = M,
-                              Rcpp::Named("P") = P);
+    return Rcpp::List::create(Rcpp::Named("M") = Mv,
+                              Rcpp::Named("P") = Pv);
     
 }

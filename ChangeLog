@@ -1,3 +1,13 @@
+2015-12-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/tfsmooth.cpp: Added roxygen code for manual page
+	* src/kfpredict.cpp: Idem
+	* src/ltidisc.cpp: Idem
+	* src/kfupdate.cpp: Added roxygen code, updated interface
+	* src/rtssmooth.cpp: Idem
+	* src/tfsmooth.cpp: Idem
+	* src/rtssmooth.cpp: Use \dQuote{} and \sQuote{}
+
 2015-12-19  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/rtssmooth.cpp: Return the cube P in result list, correct indexing,
