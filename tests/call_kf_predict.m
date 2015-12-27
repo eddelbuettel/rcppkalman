@@ -4,6 +4,7 @@
 function m = call_kf_predict()
 
     addpath("../inst/ekfukf")
+    addpath("../RcppKalman/ekfukf")     
 
     process_noise_variance = 0.01;
     measurement_noise_variance = 0.01;

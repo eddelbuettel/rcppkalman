@@ -4,6 +4,7 @@
 function A = call_lti_disc()
 
     addpath("../inst/ekfukf")
+    addpath("../RcppKalman/ekfukf")     
 
     process_noise_variance = 0.01;
 

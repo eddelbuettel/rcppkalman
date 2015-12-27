@@ -4,8 +4,6 @@ if (requireNamespace("RcppOctave", quietly=TRUE)) {
 
     suppressMessages(library(RcppOctave))
 
-    setwd("~/git/rcppkalman/tests/")
-
     ## data generation as in the demo 'kf_sine_demo'
     set.seed(42)
     S1 <- c(0.2, 1.0)

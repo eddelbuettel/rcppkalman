@@ -4,7 +4,7 @@ if (requireNamespace("RcppOctave", quietly=TRUE)) {
 
     suppressMessages(library(RcppOctave))
 
-    setwd("~/git/rcppkalman/tests/")
+    #setwd("~/git/rcppkalman/tests/")
 
     ## data generation as in the demo 'kf_sine_demo'
     set.seed(42)
@@ -24,15 +24,15 @@ if (requireNamespace("RcppOctave", quietly=TRUE)) {
 
     call_tf_smooth <- function(Y) {
 
-                                        #print(Y[1:10])
-                                        ## %
-                                        ## % Initialize KF to values
-                                        ## %
-                                        ## %   x = 0
-                                        ## %   dx/dt = 0
-                                        ## %
-                                        ## % with great uncertainty in derivative
-                                        ## %
+        ##print(Y[1:10])
+        ## %
+        ## % Initialize KF to values
+        ## %
+        ## %   x = 0
+        ## %   dx/dt = 0
+        ## %
+        ## % with great uncertainty in derivative
+        ## %
         M <- c(0,0)
         P <- diag(c(0.1, 2))
         R <- matrix(stdev^2,1,1)

@@ -4,8 +4,8 @@ if (requireNamespace("RcppOctave", quietly=TRUE)) {
     
     suppressMessages(library(RcppOctave))
 
-    setwd("~/git/rcppkalman/tests/")
-
+    print(getwd())
+    system("ls ..")
     o_source(file = "call_kf_predict.m")
     mA <- .CallOctave("call_kf_predict")
 

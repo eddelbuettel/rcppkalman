@@ -5,6 +5,7 @@ function SM = call_rts_smooth(Y)
 
     ## also needs some Kalman Filter code -- from http://becs.aalto.fi/en/research/bayes/ekfukf/
     addpath("../inst/ekfukf")
+    addpath("../RcppKalman/ekfukf")     
 
     n = length(Y(:));
 
