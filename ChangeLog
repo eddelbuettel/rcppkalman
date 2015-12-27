@@ -5,6 +5,8 @@
 	* demo/kf_cwpa_demo.R: Finished with animated sequence plots
 	* demo/kf_sine_demo.R: Updated to Cube use in smoother too
 
+	* .travis.yml: Added Octave PPA to permit use of r-cran-rcppoctave
+
 2015-12-21  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .travis.yml: Added for Travis Continuous Integration, but for now
