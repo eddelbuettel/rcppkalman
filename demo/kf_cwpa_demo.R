@@ -8,7 +8,7 @@
 
 suppressMessages(library(RcppKalman))
 
-kf_cwpa_demo <- function(seed=666) {
+kf_cwpa_demo <- function(seed=666, createFiles=FALSE) {
 
     set.seed(seed)
 
@@ -187,7 +187,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## ylabel('y');
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue")
     lines(MM[1,], MM[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Filtered"),
@@ -201,7 +201,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue")
     lines(MM[3,], MM[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Velocity", "Filtered"),
@@ -218,7 +218,7 @@ kf_cwpa_demo <- function(seed=666) {
     cat("the estimated velocity is shown.\n\n")
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue")
     lines(SM[1,], SM[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Smoothed"),
@@ -232,7 +232,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue")
     lines(SM[3,], SM[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topleft", c("Real Velocity", "Smoothed"),
@@ -247,7 +247,7 @@ kf_cwpa_demo <- function(seed=666) {
 
 
     op <- par(mfrow=c(1,2), mar=c(3,3,3,1), oma=c(0,0,1,0))
-    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue") 
+    plot(Xr[1,], Xr[2,], type="l", lty="dashed", main="Position", xlab="x", ylab="y", col="blue")
     lines(SM2[1,], SM2[2,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Trajectory", "Smoothed"),
@@ -261,7 +261,7 @@ kf_cwpa_demo <- function(seed=666) {
     ## xlabel('x^.');
     ## ylabel('y^.');
 
-    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue") 
+    plot(Xr[3,], Xr[4,], type="l", lty="dashed", main="Velocity", xlab="x", ylab="y", col="blue")
     lines(SM2[3,], SM2[4,], col="green")
     points(Xr[1,1], Xr[2,1], col='red', pch=1, cex=1.7)
     legend("topright", c("Real Velocity", "Smoothed"),
@@ -271,6 +271,64 @@ kf_cwpa_demo <- function(seed=666) {
     par(op)
 
 
+    ## Smoothing
+    EST <- NULL
+    tt <- seq(0,1,by=0.01) * 2 * pi
+    ttmat <- matrix(rbind(cos(tt), sin(tt)), nrow=2)
+    for (j in 1:ncol(Y)) {
+        M <- MM[,j]
+        P <- PP[,,j]
+        EST <- cbind(EST, M)
+        rl <- kfPredict(M, P, A, Q, B, u)
+        Mpred <- rl[[1]]
+
+        ## ellipsues
+        cc <- rep(M[1:2], length(tt)) + 2*t(chol(P[1:2,1:2])) %*% ttmat
+        if (createFiles) png(sprintf("local/cwpa_smooth%03d.png", j))
+        plot(Xr[1,], Xr[2,], type="l", lty="dashed",
+             main="Smoothing: Position", xlab="x", ylab="y", col="blue",
+             xlim=1.1*range(Xr[1,]), ylim=1.2*range(Xr[2,]))
+        points(M[1], M[2], col="black", pch=18)
+        points(Mpred[1], Mpred[2], col="red", cex=2)
+        lines(EST[1,], EST[2,], lty="dashed")
+        lines(cc[1, ], cc[2, ], col="green")
+        Sys.sleep(0.1)
+        if (createFiles) dev.off()
+    }
+
+
+    ## Filtering
+    EST <- NULL
+    tt <- seq(0,1,by=0.01) * 2 * pi
+    ttmat <- matrix(rbind(cos(tt), sin(tt)), nrow=2)
+    for (j in 1:ncol(Y)) {
+        M <- SM[,j]
+        P <- SP[,,j]
+        EST <- cbind(EST, M)
+
+        ## ellipsues
+        cc <- rep(M[1:2], length(tt)) + 2*t(chol(P[1:2,1:2])) %*% ttmat
+
+        if (createFiles) png(sprintf("local/cwpa_filter%03d.png", j))
+        plot(Xr[1,], Xr[2,], type="l", lty="dashed",
+             main="Filtering: Position", xlab="x", ylab="y", col="blue",
+             xlim=1.1*range(Xr[1,]), ylim=1.2*range(Xr[2,]))
+        points(Y[1], Y[2], col="black", pch=18)
+        points(M[1], M[2], col="red", cex=2)
+        lines(EST[1,], EST[2,], lty="dashed")
+        lines(cc[1, ], cc[2, ], col="green")
+        Sys.sleep(0.1)
+        if (createFiles) dev.off()
+    }
+
+    ## -- to convert png images into gifs
+    ## library(animation)
+    ## ani.options(interval = 0.05)
+    ## im.convert("local/cwpa_filter*png", "inst/animation/cwpa_filter.gif")
+    ## im.convert("local/cwpa_smooth*png", "inst/animation/cwpa_smooth.gif")
+
+    
 }
 
 kf_cwpa_demo()
+

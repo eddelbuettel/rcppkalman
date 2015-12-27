@@ -1,3 +1,4 @@
 src/copies
 tests/old
 .Rproj.user
+local/
