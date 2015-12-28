@@ -120,7 +120,7 @@ kf_sine_demo <- function() {
         ## end
     }
 
-    op <- par(mfcol=c(1,2), mar=c(3,3,1,1))
+    op <- par(mfcol=c(1,2), mar=c(3,3,1,1), oma=c(0,0,2,0))
     plot(Tseq, X, type='l', lty="dashed", col="blue", ylim=range(Y))
     points(Tseq, Y, col="red", pch="+")
     lines(Tseq[1:k], MM[1, 1:k], col="black")
@@ -157,6 +157,7 @@ kf_sine_demo <- function() {
     legend("topright", bty="n", lty=c("dashed", "solid", "solid"),
            legend=c("Real signal", "Filtered", "Smoothed"),
            col=c("blue", "black", "red"))
+    title(main="Kalman Filter and Smoother: Sine Wave Example", outer=TRUE, line=0)
     par(op)
 
     
