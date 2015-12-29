@@ -8,10 +8,12 @@ Kalman filtering via RcppArmadillo -- based on a R and C++ port of the
 #### Static Sine Signal And Noisy Measurement
 
 This example is not described in the pdf manual, but included as demo
-`kf_sine_demo.m` with the
+[kf_sine_demo.m](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/ekfukf/demos/kf_sine_demo/kf_sine_demo.m) within the
 [EKF/UKF](http://becs.aalto.fi/en/research/bayes/ekfukf/) sources. A signal
 is provided via a sine wave plus random noise, and a linear Kalman Filter is
-used to smooth and filter the series.
+used to smooth and filter the series. Our variant
+[demo/kf_sine_demo.R](https://github.com/eddelbuettel/rcppkalman/blob/master/demo/kf_sine_demo.R)
+reproduces the demo via the following chart
 
 ![Sine Signal](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/images/kf_sine_demo.png)
 
@@ -21,7 +23,8 @@ This demo is described in detail in Section 2.2.4 on pages 11 to 15 of the
 [EKF/UKF Documentation](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/ekfukf/ekfukf-documentation.pdf); 
 the animation is part of the corresponding Matlab code in
 [kf_cwpa_demo.m](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/ekfukf/demos/kf_cwpa_demo/kf_cwpa_demo.m). We
-show the two final charts which provide animations of the smoothing and filtering.
+show the two final charts which provide animations of the smoothing and
+filtering in our version [demo/kf_cwpa_demo.R](https://github.com/eddelbuettel/rcppkalman/blob/master/demo/kf_cwpa_demo.R):
 
 ![Smoothing](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/animation/cwpa_smooth.gif)
 ![Filtering](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/animation/cwpa_filter.gif)
