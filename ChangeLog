@@ -1,3 +1,16 @@
+2015-12-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* tests/test_kfpredict.R: Do not run test on Windows
+	* tests/test_kfupdate.R: Ditto
+	* tests/test_ltidisc.R: Ditto
+	* tests/test_rtssmooth.R: Ditto
+	* tests/test_tfsmooth.R: Ditto
+
+	* src/expmMat.cpp: Edits to manual page content to please R CMD check
+
+	* DESCRIPTION: General edits to please R CMD check, Imports: updates
+	* NAMESPACE: Updated importFrom to explicitly import expm::expm
+
 2015-12-27  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Updated, added CWPA demo gifs

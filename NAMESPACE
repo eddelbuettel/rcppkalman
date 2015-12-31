@@ -1,4 +1,4 @@
 useDynLib(RcppKalman)
-import(RcppArmadillo, expm)
 importFrom(Rcpp, evalCpp)
+importFrom(expm, expm)
 exportPattern("^[[:alpha:]]+")
