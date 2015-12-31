@@ -1,7 +1,8 @@
 
 suppressMessages(library(xts))
 suppressMessages(library(RcppKalman))
-if (requireNamespace("RcppOctave", quietly=TRUE)) {
+if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working RcppOctave, so exclude
+    (requireNamespace("RcppOctave", quietly=TRUE))) {
 
     suppressMessages(library(RcppOctave))
 
