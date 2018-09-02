@@ -1,3 +1,7 @@
+2018-09-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Updated to run.sh from r-travis
+
 2016-01-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/kf_cwpa_demo.R: Additional figure as optional output
