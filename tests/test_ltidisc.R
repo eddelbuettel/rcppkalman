@@ -1,13 +1,15 @@
 
-suppressMessages(library(xts))
-suppressMessages(library(RcppKalman))
-if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working RcppOctave, so exclude
-    (requireNamespace("RcppOctave", quietly=TRUE))) {
+suppressMessages({
+    library(xts)
+    library(RcppKalman)
+})
+if (Sys.info()[["sysname"]] != "Windows") { #&&	 ## win-builder has non-working RcppOctave, so exclude
+    #(requireNamespace("RcppOctave", quietly=TRUE))) {
 
-    suppressMessages(library(RcppOctave))
+    #suppressMessages(library(RcppOctave))
 
-    o_source(file = "call_lti_disc.m")
-    mA <- .CallOctave("call_lti_disc")
+    #o_source(file = "call_lti_disc.m")
+    #mA <- .CallOctave("call_lti_disc")
 
     ## copied / adapted from funPart1.m
     call_lti_disc <- function() {
@@ -21,8 +23,8 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
         ##      0 0 0 0 0 0];
         F <- matrix(0, 6, 6)
         F[1,3] <- F[2,4] <- F[3,5] <- F[4,6] <- 1
-        
-        
+
+
         ## Noise effect matrix for the continous-time system.
         ## L = [0 0;
         ##      0 0;
@@ -35,15 +37,15 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
 
         ## Process noise variance
         process_noise_variance  <- 0.01 #
-                                        #Qc = diag([q q]);
-        Qc <- diag(2) * process_noise_variance 
+        ## Qc = diag([q q]);
+        Qc <- diag(2) * process_noise_variance
 
         ## Discretisation of the continuous-time system.
-                                        #[A,Q] = lti_disc(F,L,Qc,1); % last item is dt stepsize set to 1
+        ##[A,Q] = lti_disc(F,L,Qc,1); % last item is dt stepsize set to 1
 
-                                        #print(F)
-                                        #print(L)
-                                        #print(Qc)
+        ##print(F)
+        ##print(L)
+        ##print(Qc)
         rl <- ltiDisc(F, L, Qc, 1)
         A <- rl[["A"]]
         Q <- rl[["Q"]]
@@ -55,5 +57,5 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
 
     rA <- call_lti_disc()
 
-    print( all.equal(mA,rA))
+    #print( all.equal(mA,rA))
 }

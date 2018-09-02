@@ -1,9 +1,9 @@
 
 suppressMessages(library(RcppKalman))
-if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working RcppOctave, so exclude
-    (requireNamespace("RcppOctave", quietly=TRUE))) {
+if (Sys.info()[["sysname"]] != "Windows") { #&&	 ## win-builder has non-working RcppOctave, so exclude
+    #(requireNamespace("RcppOctave", quietly=TRUE))) {
 
-    suppressMessages(library(RcppOctave))
+    #suppressMessages(library(RcppOctave))
 
     ## data generation as in the demo 'kf_sine_demo'
     set.seed(42)
@@ -17,22 +17,22 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
     X <- sin(w*Tseq)
     Y <- X + stdev * rnorm(length(X))
 
-    o_source(file = "call_rts_smooth.m")
-    MM <- .CallOctave("call_rts_smooth", Y)
-    mP <- MM[, ncol(MM), drop=FALSE]
+    #o_source(file = "call_rts_smooth.m")
+    #MM <- .CallOctave("call_rts_smooth", Y)
+    #mP <- MM[, ncol(MM), drop=FALSE]
 
     ## copied / adapted from funPart1
     call_rts_smooth <- function(Y) {
 
-                                        #print(Y[1:10])
-                                        ## %
-                                        ## % Initialize KF to values
-                                        ## %
-                                        ## %   x = 0
-                                        ## %   dx/dt = 0
-                                        ## %
-                                        ## % with great uncertainty in derivative
-                                        ## %
+        ##print(Y[1:10])
+        ## %
+        ## % Initialize KF to values
+        ## %
+        ## %   x = 0
+        ## %   dx/dt = 0
+        ## %
+        ## % with great uncertainty in derivative
+        ## %
         M <- c(0,0)
         P <- diag(c(0.1, 2))
         R <- matrix(stdev^2,1,1)
@@ -47,7 +47,7 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
         Q <- rl[["Q"]]
 
         ## %
-        ## % Track 
+        ## % Track
         ## %
         ## MM = zeros(size(M,1),size(Y,2));
         ## PP = zeros(size(M,1),size(M,1),size(Y,2));
@@ -57,7 +57,7 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
         PP <- array(0, dim=c(n, n, p))
 
         for (k in 1:p) {
-            
+
             ## %
             ## % Track with KF
             ## %
@@ -83,8 +83,8 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
     rl <- call_rts_smooth(Y)
     SM <- rl[["SM"]]
     rP <- SM[, ncol(SM), drop=FALSE]
-    print( all.equal(mP,rP))
-    print( all.equal(MM, SM)) 
+    #print( all.equal(mP,rP))
+    #print( all.equal(MM, SM))
 
 }
 

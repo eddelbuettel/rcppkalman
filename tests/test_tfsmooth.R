@@ -1,9 +1,9 @@
 
 suppressMessages(library(RcppKalman))
-if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working RcppOctave, so exclude
-    (requireNamespace("RcppOctave", quietly=TRUE))) {
+if (Sys.info()[["sysname"]] != "Windows") { #&& ## win-builder has non-working RcppOctave, so exclude
+    #(requireNamespace("RcppOctave", quietly=TRUE))) {
 
-    suppressMessages(library(RcppOctave))
+    #suppressMessages(library(RcppOctave))
 
     #setwd("~/git/rcppkalman/tests/")
 
@@ -19,9 +19,9 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
     X <- sin(w*Tseq)
     Y <- X + stdev * rnorm(length(X))
 
-    o_source(file = "call_tf_smooth.m")
-    MM <- .CallOctave("call_tf_smooth", Y)
-    mP <- MM[, ncol(MM), drop=FALSE]
+    #o_source(file = "call_tf_smooth.m")
+    #MM <- .CallOctave("call_tf_smooth", Y)
+    #mP <- MM[, ncol(MM), drop=FALSE]
 
     call_tf_smooth <- function(Y) {
 
@@ -48,7 +48,7 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
         Q <- rl[["Q"]]
 
         ## %
-        ## % Track 
+        ## % Track
         ## %
         ## MM = zeros(size(M,1),size(Y,2));
         ## PP = zeros(size(M,1),size(M,1),size(Y,2));
@@ -58,7 +58,7 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
         PP <- array(0, dim=c(n, n, p))
 
         for (k in 1:p) {
-            
+
             ## %
             ## % Track with KF
             ## %
@@ -85,7 +85,7 @@ if ((Sys.info()[["sysname"]] != "Windows") &&	 ## win-builder has non-working Rc
     rl <- call_tf_smooth(Y)
     SM <- rl[["M"]]
     rP <- SM[, ncol(SM), drop=FALSE]
-    print( all.equal(mP,rP))
-    print( all.equal(MM, SM)) 
+    #print( all.equal(mP,rP))
+    #print( all.equal(MM, SM))
 
 }
