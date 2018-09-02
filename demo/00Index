@@ -1,2 +1,3 @@
 kf_sine_demo    Kalman filtering of a sine wave plus noice
 kf_cwpa_demo    Filtering of Continuous Wiener Process Acceleration (CWPA)
+ekf_sine_demo   Extended Kalman Filter using a random sine signal model

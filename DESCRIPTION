@@ -14,6 +14,6 @@ Description: An 'RcppArmadillo'-based port of the Kalman filtering code
 License: GPL (>= 2)
 Imports: expm, Rcpp
 LinkingTo: Rcpp, RcppArmadillo
-Suggests: RcppOctave, xts
+Suggests: xts
 Encoding: UTF-8
 RoxygenNote: 5.0.1

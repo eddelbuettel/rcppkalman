@@ -1,3 +1,21 @@
+2018-09-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: No longer Suggests: RcppOctave which is off CRAN
+
+	* tests/test_kfpredict.R: No longer compare to RcppOctave
+	* tests/test_kfupdate.R: Idem
+	* tests/test_ltidisc.R: Idem
+	* tests/test_rtssmooth.R: Idem
+	* tests/test_tfsmooth.R: Idem
+
+	* demo/00Index: Added ekf_sine_demo index
+
+	* .travis.yml: Updated to run.sh from r-travis
+
+2016-05-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/ekf_sine_demo.R: Additional demo
+
 2016-01-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/kf_cwpa_demo.R: Additional figure as optional output
