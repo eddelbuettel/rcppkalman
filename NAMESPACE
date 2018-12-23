@@ -1,4 +1,4 @@
-useDynLib(RcppKalman)
+useDynLib(RcppKalman, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 importFrom(expm, expm)
 exportPattern("^[[:alpha:]]+")

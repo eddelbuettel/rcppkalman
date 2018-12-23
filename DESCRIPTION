@@ -1,8 +1,8 @@
 Package: RcppKalman
 Type: Package
 Title: 'RcppArmadillo'-Based Kalman Filtering
-Version: 0.0.6
-Date: 2015-12-31
+Version: 0.0.6.1
+Date: 2018-12-23
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: An 'RcppArmadillo'-based port of the Kalman filtering code
