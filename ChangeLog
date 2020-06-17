@@ -1,3 +1,9 @@
+2020-06-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* README.md: Added badges, updated image URLs
+
+	* .travis.yml: Updated to 'bionic' and R 4.0.0
+
 2018-12-23  Dirk Eddelbuettel  <edd@debian.org>
 
 	* NAMESPACE: Add .registration=TRUE to useDynLib()
