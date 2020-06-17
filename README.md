@@ -3,6 +3,24 @@
 Kalman filtering via RcppArmadillo -- based on a R and C++ port of the 
 [EKF/UKF](http://becs.aalto.fi/en/research/bayes/ekfukf/) toolbox for Matlab
 
+[![Build Status](https://travis-ci.org/eddelbuettel/rcppkalman.svg)](https://travis-ci.org/eddelbuettel/rcppkalman) 
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
+[![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/rcppkalman)](https://github.com/eddelbuettel/rcppkalman)
+
+## Why?
+
+R has a number of existing Kalman filter packages which are all very
+noteworthy in their own right. A comparison was provided by
+[this JSS paper from 2011](http://www.jstatsoft.org/v39/i02).
+
+Yet I had a need for something both simple and fast at the C++ level.
+
+The [EKF/UKF](http://becs.aalto.fi/en/research/bayes/ekfukf/) toolbox for
+Matlab proved to be a wonderful source of excellent code that was well
+documented (see [this 130 page pdf manual]http://becs.aalto.fi/en/research/bayes/ekfukf/documentation.pdf()),
+under a suitable license and covering both simple examples as
+well as promising extensions.
+
 ### Demos
 
 #### Static Sine Signal And Noisy Measurement
@@ -15,7 +33,7 @@ used to smooth and filter the series. Our variant
 [demo/kf_sine_demo.R](https://github.com/eddelbuettel/rcppkalman/blob/master/demo/kf_sine_demo.R)
 reproduces the demo via the following chart
 
-![Sine Signal](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/images/kf_sine_demo.png)
+![Sine Signal](http://eddelbuettel.github.io/rcppkalman/kf_sine_demo.png)
 
 #### Continuous Wiener-Process Acceleration
 
@@ -26,8 +44,8 @@ the animation is part of the corresponding Matlab code in
 show the two final charts which provide animations of the smoothing and
 filtering in our version [demo/kf_cwpa_demo.R](https://github.com/eddelbuettel/rcppkalman/blob/master/demo/kf_cwpa_demo.R):
 
-![Smoothing](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/animation/cwpa_smooth.gif)
-![Filtering](https://github.com/eddelbuettel/rcppkalman/blob/master/inst/animation/cwpa_filter.gif)
+![Smoothing](http://eddelbuettel.github.io/rcppkalman/cwpa_smooth.gif)
+![Filtering](http://eddelbuettel.github.io/rcppkalman/cwpa_filter.gif)
 
 ### Status
 
