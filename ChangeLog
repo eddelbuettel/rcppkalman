@@ -1,3 +1,8 @@
+2025-08-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Makevars (PKG_CXXFLAGS): Define -DARMA_USE_CURRENT
+	* src/Makevars.win (PKG_CXXFLAGS): Idem
+
 2020-06-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Added badges, updated image URLs
